@@ -27,10 +27,10 @@ function is_on_portal(player)
     limit = 1
   })
   if nearby_portals[1] then
-    local is_on_portal = "no"
+    local is_on_portal = "yes"
     return is_on_portal
   else
-    local is_on_portal = "yes"
+    local is_on_portal = "no"
     return is_on_portal
   end
 end
@@ -87,12 +87,12 @@ function find_portal(traveler, destination_coordinates)
         radius = 96,
         name = "nether-portal"
       })
-      if found_portals == nil then
-        local new_portal = create_portal(traveler, destination_coordinates)
-        return new_portal
-      else
+      if found_portals[1] then
         local closest_portal = game.surfaces["nauvis"].get_closest(destination_coordinates.position, found_portals)
         return closest_portal
+      else
+        local new_portal = create_portal(traveler, destination_coordinates)
+        return new_portal
       end
     else
       game.surfaces["nauvis"].request_to_generate_chunks(chunk_position, 3)
@@ -112,12 +112,12 @@ function find_portal(traveler, destination_coordinates)
         radius = 96,
         name = "nether-portal"
       })
-      if found_portals == nil then
-        local new_portal = create_portal(traveler, destination_coordinates)
-        return new_portal
-      else
+      if found_portals[1] then
         local closest_portal = game.surfaces["nether"].get_closest(destination_coordinates.position, found_portals)
         return closest_portal
+      else
+        local new_portal = create_portal(traveler, destination_coordinates)
+        return new_portal
       end
     else
       game.surfaces["nether"].request_to_generate_chunks(chunk_position, 3)
