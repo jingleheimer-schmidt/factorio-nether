@@ -4,9 +4,9 @@ script.on_init(function()
   game.create_surface("nether")
 end)
 
--- every 90 ticks check if player is near portal, if yes then teleport
+-- every 120 ticks check if player is near portal, if yes then teleport
 -- code modified from original by Bilka: https://github.com/Bilka2/Portals/blob/master/control.lua
-script.on_nth_tick(90, function()
+script.on_nth_tick(120, function()
   for _, player in pairs(game.connected_players) do
     if player.character and not player.vehicle then
       local is_on_portal = is_on_portal(player)
