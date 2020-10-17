@@ -1,0 +1,9 @@
+{
+	"name": "factorio-nether",
+	"version": "0.0.1",
+	"title": "The Nether",
+	"description": "Adds the nether, kind of like minecraft.",
+	"author": "asher_sky",
+	"dependencies": ["base >= 1.0.0"],
+	"factorio_version": "1.0"
+}
