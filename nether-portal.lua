@@ -81,7 +81,7 @@ local netherPortal = {
   collision_mask = {"item-layer", "object-layer", "water-tile"},
   selection_box = {{-2, -2.5}, {2, 2.5}},
   render_layer = "floor",
-  map_color = {r=142, g=70, b=218, a=1},
+  map_color = {r=142, g=70, b=218}, -- don't define alpha
   remove_decoratives = "true",
   allow_copy_paste = "false",
   minable = {
