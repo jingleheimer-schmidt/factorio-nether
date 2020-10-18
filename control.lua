@@ -52,11 +52,12 @@ end
 -- calculate coordinates
 function calculate_coordinates(traveler)
   local current_surface = traveler.surface
+  local nether_scale = settings.startup["nether-scale-setting"].value
   if current_surface.name == "nauvis" then
     local destination_coordinates = {
       position = {
-        x = traveler.position.x/8,
-        y = traveler.position.y/8
+        x = traveler.position.x/nether_scale,
+        y = traveler.position.y/nether_scale
       },
       surface = "nether"
     }
@@ -64,8 +65,8 @@ function calculate_coordinates(traveler)
   elseif current_surface.name == "nether" then
     local destination_coordinates = {
       position = {
-        x = traveler.position.x*8,
-        y = traveler.position.y*8
+        x = traveler.position.x*nether_scale,
+        y = traveler.position.y*nether_scale
       },
       surface = "nauvis"
     }
