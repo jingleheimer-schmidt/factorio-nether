@@ -2,7 +2,7 @@ local netherPortal = {
   type = "simple-entity",
   name = "nether-portal",
   icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
-  icon_size = 150,
+  icon_size = 250,
   animations = {
     sheets = {
       {
@@ -15,63 +15,63 @@ local netherPortal = {
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {-.5, -1}, --top left
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {.5, -1}, --top right
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {-.5, 0}, --middle left
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {.5, 0}, --middle right
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {-.5, 1}, --bottom left
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       },
       {
-        filename = "__factorio-nether__/graphics/portal_animation_block.png",
-        width = 16,
-        height = 16,
+        filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
+        width = 32,
+        height = 32,
         variation_count = 31,
         frame_count = 31,
         shift = {.5, 1}, --bottom right
-        scale = 2,
+        scale = 1,
         animation_speed = .3
       }
     }
@@ -79,9 +79,31 @@ local netherPortal = {
   random_variation_on_create = "true",
   collision_box = {{-2, -2.5}, {2, 2.5}},
   collision_mask = {"item-layer", "object-layer", "water-tile"},
-  selection_box = {{-2, -2.5}, {2, 2.5}}
+  selection_box = {{-2, -2.5}, {2, 2.5}},
+  render_layer = "floor",
+  map_color = {r=142, g=70, b=218, a=1},
+  remove_decoratives = "true",
+  allow_copy_paste = "false",
+  minable = {
+    mining_time = 32,
+    result = "nether-portal-item"
+  },
+  flage = {
+    "placeable-player",
+    "no-copy-paste"
+  }
+}
+
+local netherPortalItem = {
+  type = "item",
+  name = "nether-portal-item",
+  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
+  icon_size = 250,
+  stack_size = 1,
+  place_result = "nether-portal"
 }
 
 data:extend({
-  netherPortal
+  netherPortal,
+  netherPortalItem
 })
