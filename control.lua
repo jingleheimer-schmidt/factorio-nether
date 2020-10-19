@@ -71,6 +71,7 @@ end)
 -- runs when landmine is armed
 script.on_event(defines.events.on_land_mine_armed, function(mine)
   if mine.name == "nether-portal-landmine" then
+    game.print("landmine armed, playing trigger sound")
     game.surfaces[mine.surface.name].play_sound{
       path = "trigger-sound",
       position = mine.position,
@@ -95,6 +96,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
   local entity = event.entity
   if not (entity and entity.valid) then return end
   if entity.name ~= "nether-portal-landmine-sticker" then return end
+  game.print("landmine sticker placed on player")
   local source = event.source
   if not (source and source.valid) then return end
   local stuck_to = entity.sticked_to
@@ -113,6 +115,7 @@ script.on_event(defines.events.on_built_entity, function(event)
       name = "nether-portal-landmine",
       position = event.created_entity.position
     })
+    game.print("landmine built (player placed portal)")
   end
 end)
 
@@ -124,6 +127,7 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
       name = "nether-portal-landmine",
       position = event.created_entity.position
     })
+    game.print("landmine built (robot placed portal)")
   end
 end)
 
@@ -137,8 +141,10 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
         name = "nether-portal-landmine",
         limit = 1
       })
+      game.print("landmine found (player mined portal)")
     if found_landmine[1] then
       found_landmine.destory()
+      game.print("landmine destroyed (player mined portal)")
     end
   end
 end)
@@ -153,8 +159,10 @@ script.on_event(defines.events.on_robot_mined_entity, function(event)
         name = "nether-portal-landmine",
         limit = 1
       })
+      game.print("landmine found (robot mined portal)")
     if found_landmine[1] then
       found_landmine.destory()
+      game.print("landmine destroyed (robot mined portal)")
     end
   end
 end)
@@ -170,9 +178,11 @@ function is_on_portal(traveler)
   })
   if nearby_portals[1] then
     local is_on_portal = "yes"
+    game.print("player is on portal")
     return is_on_portal
   else
     local is_on_portal = "no"
+    game.print("player is not on portal")
     return is_on_portal
   end
 end

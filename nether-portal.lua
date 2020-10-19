@@ -204,18 +204,18 @@ local netherPortalLandmine = {
     action_delivery =
     {
       type = "instant",
-      source_effects =
-      {
-        {
-          type = "nested-result",
-          affects_target = true,
-          action =
-          {
-            type = "direct",
-            action_delivery =
-            {
-              type = "instant",
-              target_effects =
+      target_effects =
+      -- {
+      --   {
+      --     type = "nested-result",
+      --     affects_target = true,
+      --     action =
+      --     {
+      --       type = "direct",
+      --       action_delivery =
+      --       {
+      --         type = "instant",
+      --         target_effects =
               {
                 {
                   type = "create-sticker",
@@ -223,10 +223,10 @@ local netherPortalLandmine = {
                   trigger_created_entity = true
                 }
               }
-            }
-          }
-        }
-      }
+      --       }
+      --     }
+      --   }
+      -- }
     }
   }
 }
