@@ -76,6 +76,16 @@ local netherPortal = {
       }
     }
   },
+  integration_patch = {
+    sheet = {
+      filename = "__factorio-nether__/graphics/integration_patch_512_v2.png",
+      width = 512,
+      height = 512,
+      frames = 1,
+      scale = .5
+    }
+  },
+  integration_patch_render_layer = "ground-patch-higher2",
   random_variation_on_create = "true",
   collision_box = {{-2, -2.5}, {2, 2.5}},
   collision_mask = {"item-layer", "object-layer", "water-tile"},
