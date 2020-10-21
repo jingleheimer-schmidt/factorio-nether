@@ -139,14 +139,14 @@ local netherPortalItem = {
 local netherPortalLandmine = {
   type = "land-mine",
   name = "nether-portal-landmine",
-  icon = "__base__/graphics/icons/land-mine.png",
-  icon_size = 64, icon_mipmaps = 4,
+  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
+  icon_size = 250,
   flags =
   {
     "placeable-player",
     "placeable-enemy",
     "player-creation",
-    "placeable-off-grid",
+    -- "placeable-off-grid",
     "not-on-map"
   },
   minable = {
@@ -157,7 +157,7 @@ local netherPortalLandmine = {
   -- max_health = 15,
   -- corpse = "land-mine-remnants",
   -- dying_explosion = "land-mine-explosion",
-  collision_box = {{-1, -1.5}, {1, 1.5}},
+  collision_box = {{-2, -2.5}, {2, 2.5}},
   selection_box = {{-2, -2.5}, {2, 2.5}},
   -- damaged_trigger_effect = hit_effects.entity(),
   -- open_sound = sounds.machine_open,
@@ -186,6 +186,7 @@ local netherPortalLandmine = {
     height = 32
   },
   trigger_radius = 2,
+  trigger_force = "all",
   timeout = 230,
   ammo_category = "landmine",
   force_die_on_attack = "false",
