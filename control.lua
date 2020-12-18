@@ -4,34 +4,113 @@ script.on_init(function()
   game.create_surface("nether")
 end)
 
--- runs when landmine is armed
-script.on_event(defines.events.on_land_mine_armed, function(mine)
-  if mine.name == "nether-portal-landmine" then
-    game.print("landmine armed, playing portal-trigger sound")
-    game.surfaces[mine.surface.name].play_sound{
-      path = "trigger-sound",
-      position = mine.position,
-      volume_modifier = 1
+-- -- runs when landmine is armed
+-- script.on_event(defines.events.on_land_mine_armed, function(mine)
+--   if mine.name == "nether-portal-landmine" then
+--     game.print("landmine armed, playing portal-trigger sound")
+--     game.surfaces[mine.surface.name].play_sound{
+--       path = "trigger-sound",
+--       position = mine.position,
+--       volume_modifier = 1
+--     }
+--   end
+-- end)
+
+script.on_event(defines.events.on_trigger_created_entity, function(event)
+  local sticker = event.entity
+  local player = sticker.sticked_to.player
+
+  event.entity.surface.play_sound{
+    path = "trigger-sound",
+    position = event.entity.position,
+    volume_modifier = 1
+  }
+  game.print("trigger sound played")
+
+  if not global.teleport_soon then
+    global.teleport_soon = {}
+    global.teleport_soon[player] = {
+      player = player,
+      sticker = sticker,
+      tick = event.tick
+    }
+  else
+    global.teleport_soon[player] = {
+      player = player,
+      sticker = sticker,
+      tick = event.tick + 210
     }
   end
 end)
 
--- runs when nether portal landmine sticker is created/attached to player
--- modified from original by Klonan: https://github.com/Klonan/Teleporters/blob/master/script/teleporters.lua
-script.on_event(defines.events.on_trigger_created_entity, function(event)
-  local entity = event.entity
-  if not (entity and entity.valid) then return end
-  if entity.name ~= "nether-portal-landmine-sticker" then return end
-  game.print("landmine sticker placed on player")
-  local source = event.source
-  if not (source and source.valid) then return end
-  local traveler = entity.sticked_to
-  if not (traveler and traveler.valid) then return end
-  local is_on_portal = is_on_portal(traveler)
-  if is_on_portal == "yes" then
-    into_portal(traveler)
+script.on_event(defines.events.on_tick, function()
+  if not global.teleport_soon then
+    return
+  else
+    for a,b in pairs(global.teleport_soon) do
+      if b.tick == game.tick then
+        local is_on_portal = is_on_portal(b.player)
+        if is_on_portal == "yes" then
+          into_portal(b.player)
+        end
+      end
+    end
   end
 end)
+
+-- script.on_event(defines.events.on_trigger_created_entity, function(event)
+--   if event.entity.name == "nether-portal-landmine-sticker" then
+--     game.print("sticker placed on player")
+--     event.entity.surface.play_sound{
+--       path = "trigger-sound",
+--       position = event.entity.position,
+--       volume_modifier = 1
+--     }
+--     game.print("trigger sound played")
+--     local registration_number = script.register_on_entity_destroyed(event.entity)
+--     game.print("reg # = " .. registration_number)
+--   end
+-- end)
+--
+-- script.on_event(defines.events.on_entity_destroyed, function(event)
+--   game.print("entity destroyed, reg # = " .. event.registration_number)
+-- end)
+--
+-- script.on_nth_tick(5, function()
+--   if game.get_player("asher_sky").character.stickers then
+--     for a,b in pairs(game.get_player("asher_sky").character.stickers) do
+--       game.print(a .. b.name)
+--     end
+--   end
+-- end)
+
+-- -- runs when nether portal landmine sticker is created/attached to player
+-- -- modified from original by Klonan: https://github.com/Klonan/Teleporters/blob/master/script/teleporters.lua
+-- script.on_event(defines.events.on_trigger_created_entity, function(event)
+--   local entity = event.entity
+--   if not (entity and entity.valid) then return end
+--   if entity.name ~= "nether-portal-landmine-sticker" then return end
+--   game.print("landmine sticker placed on player")
+--   local source = event.source
+--   if not (source and source.valid) then return end
+--   local traveler = entity.sticked_to.player
+--   if not (traveler and traveler.valid) then return end
+--   local is_on_portal = is_on_portal(traveler)
+--   if is_on_portal == "yes" then
+--     into_portal(traveler)
+--   end
+-- end)
+
+-- script.on_event(defines.events.on_entity_died, function(event)
+--   local sticker = event.entity
+--   game.print("sticker died")
+--   local traveler = sticker.stuck_to.player
+--   local is_on_portal = is_on_portal(traveler)
+--   if is_on_portal == "yes" then
+--     into_portal(traveler)
+--   end
+-- end,
+-- {{filter="name", name = "nether-portal-landmine-sticker"}})
 
 -- is player on portal?
 function is_on_portal(traveler)
@@ -60,18 +139,18 @@ function into_portal(traveler)
     local destination_coordinates = calculate_coordinates(traveler)
     local destination_portal = find_portal(traveler, destination_coordinates)
     traveler.teleport(destination_portal.position, destination_portal.surface)
-    game.surfaces[traveler.surface.name].play_sound{     -- does this sound play on nauvis or nether?
+    traveler.surface.play_sound{     -- does this sound play on nauvis or nether?
       path = "travel-sound",
-      position = player.position,
+      position = traveler.position,
       volume_modifier = 1
     }
   elseif current_surface.name == "nether" then
     local destination_coordinates = calculate_coordinates(traveler)
     local destination_portal = find_portal(traveler, destination_coordinates)
     traveler.teleport(destination_portal.position, destination_portal.surface)
-    game.surfaces[traveler.surface.name].play_sound{     -- does this sound play on nauvis or nether?
+    traveler.surface.play_sound{     -- does this sound play on nauvis or nether?
       path = "travel-sound",
-      position = player.position,
+      position = traveler.position,
       volume_modifier = 1
     }
   end
@@ -160,7 +239,7 @@ end
 -- create a new portal
 function create_portal(traveler, destination_coordinates)
   if destination_coordinates.surface == "nauvis" then
-    local new_portal_position = game.surfaces["nauvis"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1)
+    local new_portal_position = game.surfaces["nauvis"].find_non_colliding_position("nether-portal-landmine", destination_coordinates.position, 0, 1)
 --     local new_portal = game.surfaces["nauvis"].create_entity(
 --     {
 --       name = "nether-portal",
@@ -171,11 +250,11 @@ function create_portal(traveler, destination_coordinates)
     {
       name = "nether-portal-landmine",
       position = new_portal_position,
-        player = traveler
+      player = traveler
     })
     return new_portal
   elseif destination_coordinates.surface == "nether" then
-    local new_portal_position = game.surfaces["nether"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1)
+    local new_portal_position = game.surfaces["nether"].find_non_colliding_position("nether-portal-landmine", destination_coordinates.position, 0, 1)
 --     local new_portal = game.surfaces["nether"].create_entity(
 --     {
 --       name = "nether-portal",
@@ -186,7 +265,7 @@ function create_portal(traveler, destination_coordinates)
     {
       name = "nether-portal-landmine",
       position = new_portal_position,
-        player = traveler
+      player = traveler
     })
     return new_portal
   end
