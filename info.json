@@ -4,6 +4,6 @@
 	"title": "The Nether",
 	"description": "Adds the nether, kind of like minecraft.",
 	"author": "asher_sky",
-	"dependencies": ["base >= 1.0.0"],
-	"factorio_version": "1.0"
+	"dependencies": ["base >= 1.1.0"],
+	"factorio_version": "1.1"
 }
