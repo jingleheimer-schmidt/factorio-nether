@@ -35,14 +35,14 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     global.teleport_soon[player] = {
       player = player,
       sticker = sticker,
-      tick = event.tick + 210
+      tick = event.tick + 240
     }
     game.print("global.teleport_soon set")
   else
     global.teleport_soon[player] = {
       player = player,
       sticker = sticker,
-      tick = event.tick + 210
+      tick = event.tick + 240
     }
     game.print("global.teleport_soon set")
   end
@@ -121,6 +121,7 @@ function into_portal(traveler)
   if current_surface.name == "nauvis" then
     local destination_coordinates = calculate_coordinates(traveler)
     local destination_portal = find_portal(traveler, destination_coordinates)
+    game.print("traveling from nauvis to nether")
     traveler.teleport(destination_portal.position, destination_portal.surface)
     traveler.surface.play_sound{
       path = "travel-sound",
@@ -130,6 +131,7 @@ function into_portal(traveler)
   elseif current_surface.name == "nether" then
     local destination_coordinates = calculate_coordinates(traveler)
     local destination_portal = find_portal(traveler, destination_coordinates)
+    game.print("traveling from nether to nauvis")
     traveler.teleport(destination_portal.position, destination_portal.surface)
     traveler.surface.play_sound{
       path = "travel-sound",
@@ -151,6 +153,7 @@ function calculate_coordinates(traveler)
       },
       surface = "nether"
     }
+    game.print("calculated coordinates")
     return destination_coordinates
   elseif current_surface.name == "nether" then
     local destination_coordinates = {
@@ -160,6 +163,7 @@ function calculate_coordinates(traveler)
       },
       surface = "nauvis"
     }
+    game.print("calculated coordinates")
     return destination_coordinates
   end
 end
@@ -180,15 +184,18 @@ function find_portal(traveler, destination_coordinates)
       })
       if found_portals[1] then
         local closest_portal = game.surfaces["nauvis"].get_closest(destination_coordinates.position, found_portals)
+        game.print("found a portal on nauvis!")
         return closest_portal
       else
         local new_portal = create_portal(traveler, destination_coordinates)
+        game.print("no portal found on nauvis, created new one!")
         return new_portal
       end
     else
       game.surfaces["nauvis"].request_to_generate_chunks(chunk_position, 3)
       game.surfaces["nauvis"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
+      game.print("no portal found on nauvis, created new one!")
       return new_portal
     end
   elseif destination_coordinates.surface == "nether" then
@@ -205,15 +212,18 @@ function find_portal(traveler, destination_coordinates)
       })
       if found_portals[1] then
         local closest_portal = game.surfaces["nether"].get_closest(destination_coordinates.position, found_portals)
+        game.print("found a portal in the nether!")
         return closest_portal
       else
         local new_portal = create_portal(traveler, destination_coordinates)
+        game.print("no portal found in the nether, created new one!")
         return new_portal
       end
     else
       game.surfaces["nether"].request_to_generate_chunks(chunk_position, 3)
       game.surfaces["nether"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
+      game.print("no portal found in the nether, created new one!")
       return new_portal
     end
   end
@@ -342,7 +352,6 @@ end)
 -- end)
 
 -- -- runs when nether portal landmine sticker is created/attached to player
--- -- modified from original by Klonan: https://github.com/Klonan/Teleporters/blob/master/script/teleporters.lua
 -- script.on_event(defines.events.on_trigger_created_entity, function(event)
 --   local entity = event.entity
 --   if not (entity and entity.valid) then return end
@@ -359,7 +368,6 @@ end)
 -- end)
 
 -- -- every 120 ticks check if player is near portal, if yes then teleport
--- -- code modified from original by Bilka: https://github.com/Bilka2/Portals/blob/master/control.lua
 -- script.on_nth_tick(120, function()
 --   for _, player in pairs(game.connected_players) do
 --     if player.character and not player.vehicle then
@@ -372,7 +380,6 @@ end)
 -- end)
 
 -- -- every 120 ticks check if player is near portal, if yes then teleport
--- -- code modified from original by Bilka: https://github.com/Bilka2/Portals/blob/master/control.lua
 -- script.on_nth_tick(10, function()
 --   for _, player in pairs(game.connected_players) do
 --     if player.character and not player.vehicle then
