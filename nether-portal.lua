@@ -185,9 +185,9 @@ local netherPortalLandmine = {
     width = 32,
     height = 32
   },
-  trigger_radius = 2,
+  trigger_radius = 4,
   trigger_force = "all",
-  timeout = 10,
+  timeout = 1,
   ammo_category = "landmine",
   force_die_on_attack = "false",
   action =
@@ -241,7 +241,7 @@ local netherPortalLandmineSticker = {
   --icon = "__base__/graphics/icons/slowdown-sticker.png",
   flags = {},
   animation = util.empty_sprite(),
-  duration_in_ticks = 210,
+  duration_in_ticks = 10,
   --target_movement_modifier = 1
 }
 
