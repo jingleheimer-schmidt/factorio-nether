@@ -16,30 +16,35 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
   local player = sticker.sticked_to.player
 -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
   if global.teleport_cooldown then
-    if global.teleport_cooldown[player] then
-      if global.teleport_cooldown[player].cooldown_until then
-        game.print("cooldown active, no sound, no trigger")
-        return
-      end
+    if global.teleport_cooldown[player.index] then
+      game.print("cooldown active, no sound, no trigger")
+      return
+    end
+  end
+-- DON'T DO ANYTHING IF PLAYER IS ALREADY ABOUT TO TELEPORT SOON
+  if global.teleport_soon then
+    if global.teleport_soon[player.index] then
+      game.print("global.teleport_soon already exists, no sound no trigger")
+      return
     end
   end
   player.surface.play_sound{
     path = "trigger-sound",
     position = player.position,
-    volume_modifier = 1
+    volume_modifier = .8
   }
   game.print("trigger sound played")
 -- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
   if not global.teleport_soon then
     global.teleport_soon = {}
-    global.teleport_soon[player] = {
+    global.teleport_soon[player.index] = {
       player = player,
       sticker = sticker,
       tick = event.tick + 240
     }
     game.print("global.teleport_soon set")
   else
-    global.teleport_soon[player] = {
+    global.teleport_soon[player.index] = {
       player = player,
       sticker = sticker,
       tick = event.tick + 240
@@ -54,41 +59,48 @@ script.on_event(defines.events.on_tick, function()
       game.print("global.teleport_soon exists")
       if b.tick == game.tick then
         game.print("it's the teleport tick!")
-        if b.player.valid and b.player.connected then
+        local player = b.player
+        if player.valid and player.connected then
           game.print("player is valid and connected")
-          if is_on_portal(b.player) == "yes" then
-            into_portal(b.player)
+          if is_on_portal(player) == "yes" then
+            into_portal(player)
             if not global.teleport_cooldown then
               global.teleport_cooldown = {}
-              global.teleport_cooldown[b.player] = {
-                cooldown_until = game.tick + 180
+              global.teleport_cooldown[player.index] = {
+                cooldown_until = game.tick + 420,
+                player = player
               }
               game.print("global.teleport_cooldown set")
+              global.teleport_soon[a] = nil
             else
-              global.teleport_cooldown[b.player] = {
-                cooldown_until = game.tick + 180
+              global.teleport_cooldown[player.index] = {
+                cooldown_until = game.tick + 420,
+                player = player
               }
               game.print("global.teleport_cooldown set")
+              global.teleport_soon[a] = nil
             end
-            b = nil
+          else
+            game.print("not on portal, didn't teleport, cleared global.teleport_soon")
+            global.teleport_soon[a] = nil
           end
         end
       end
-      if not global.teleport_soon[1] then
-        global.teleport_soon = nil
-        game.print("global.teleport_soon cleared")
-      end
+    end
+    if next(global.teleport_soon) == nil then
+      global.teleport_soon = nil
+      game.print("global.teleport_soon cleared")
     end
   end
   if global.teleport_cooldown then
     for a,b in pairs(global.teleport_cooldown) do
-      game.print(b.cooldown_until .. "teleport cooldown active")
+      game.print(b.cooldown_until .. " teleport cooldown active")
       if b.cooldown_until == game.tick then
-        b = nil
+        global.teleport_cooldown[a] = nil
         game.print("teleport cooldown ended")
       end
     end
-    if not global.teleport_cooldown[1] then
+    if next(global.teleport_cooldown) == nil then
       global.teleport_cooldown = nil
       game.print("global.teleport_cooldown cleared")
     end
@@ -100,7 +112,7 @@ function is_on_portal(traveler)
   local nearby_portals = traveler.surface.find_entities_filtered(
   {
     position = traveler.position,
-    radius = 2,
+    -- radius = 2,
     name = "nether-portal",
     limit = 1
   })
@@ -126,7 +138,7 @@ function into_portal(traveler)
     traveler.surface.play_sound{
       path = "travel-sound",
       position = traveler.position,
-      volume_modifier = 1
+      volume_modifier = .8
     }
   elseif current_surface.name == "nether" then
     local destination_coordinates = calculate_coordinates(traveler)
@@ -136,7 +148,7 @@ function into_portal(traveler)
     traveler.surface.play_sound{
       path = "travel-sound",
       position = traveler.position,
-      volume_modifier = 1
+      volume_modifier = .8
     }
   end
 end
@@ -239,12 +251,24 @@ function create_portal(traveler, destination_coordinates)
       position = new_portal_position,
       player = traveler
     })
+    game.surfaces["nauvis"].create_entity(
+    {
+      name = "nether-portal-landmine",
+      position = new_portal_position,
+      player = traveler
+    })
     return new_portal
   elseif destination_coordinates.surface == "nether" then
     local new_portal_position = game.surfaces["nether"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1)
     local new_portal = game.surfaces["nether"].create_entity(
     {
       name = "nether-portal",
+      position = new_portal_position,
+      player = traveler
+    })
+    game.surfaces["nether"].create_entity(
+    {
+      name = "nether-portal-landmine",
       position = new_portal_position,
       player = traveler
     })
