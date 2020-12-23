@@ -32,7 +32,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     position = player.position,
     volume_modifier = .8
   }
-  game.print("trigger sound played")
+  -- game.print("trigger sound played")
 -- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
   if not global.teleport_soon then
     global.teleport_soon = {}
@@ -40,25 +40,25 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
       player = player,
       tick = event.tick + 240
     }
-    game.print("global.teleport_soon set")
+    -- game.print("global.teleport_soon set")
   else
     global.teleport_soon[player.index] = {
       player = player,
       tick = event.tick + 240
     }
-    game.print("global.teleport_soon set")
+    -- game.print("global.teleport_soon set")
   end
 end)
 
 script.on_event(defines.events.on_tick, function()
   if global.teleport_soon then
     for a,b in pairs(global.teleport_soon) do
-      game.print("global.teleport_soon exists")
+      -- game.print("global.teleport_soon exists")
       if b.tick == game.tick then
-        game.print("it's the teleport tick!")
+        -- game.print("it's the teleport tick!")
         local player = b.player
         if player.valid and player.connected then
-          game.print("player is valid and connected")
+          -- game.print("player is valid and connected")
           if is_on_portal(player) == "yes" then
             into_portal(player)
             if not global.teleport_cooldown then
@@ -67,14 +67,14 @@ script.on_event(defines.events.on_tick, function()
                 cooldown_until = game.tick + 420,
                 player = player
               }
-              game.print("global.teleport_cooldown set")
+              -- game.print("global.teleport_cooldown set")
               global.teleport_soon[a] = nil
             else
               global.teleport_cooldown[player.index] = {
                 cooldown_until = game.tick + 420,
                 player = player
               }
-              game.print("global.teleport_cooldown set")
+              -- game.print("global.teleport_cooldown set")
               global.teleport_soon[a] = nil
             end
           else
@@ -86,20 +86,20 @@ script.on_event(defines.events.on_tick, function()
     end
     if next(global.teleport_soon) == nil then
       global.teleport_soon = nil
-      game.print("global.teleport_soon cleared")
+      -- game.print("global.teleport_soon cleared")
     end
   end
   if global.teleport_cooldown then
     for a,b in pairs(global.teleport_cooldown) do
-      game.print(b.cooldown_until .. " teleport cooldown active")
+      -- game.print(b.cooldown_until .. " teleport cooldown active")
       if b.cooldown_until == game.tick then
         global.teleport_cooldown[a] = nil
-        game.print("teleport cooldown ended")
+        -- game.print("teleport cooldown ended")
       end
     end
     if next(global.teleport_cooldown) == nil then
       global.teleport_cooldown = nil
-      game.print("global.teleport_cooldown cleared")
+      -- game.print("global.teleport_cooldown cleared")
     end
   end
 end)
@@ -162,7 +162,7 @@ function calculate_coordinates(traveler)
       },
       surface = "nether"
     }
-    game.print("calculated coordinates")
+    -- game.print("calculated coordinates")
     return destination_coordinates
   elseif current_surface.name == "nether" then
     local destination_coordinates = {
@@ -172,7 +172,7 @@ function calculate_coordinates(traveler)
       },
       surface = "nauvis"
     }
-    game.print("calculated coordinates")
+    -- game.print("calculated coordinates")
     return destination_coordinates
   end
 end
@@ -193,18 +193,18 @@ function find_portal(traveler, destination_coordinates)
       })
       if found_portals[1] then
         local closest_portal = game.surfaces["nauvis"].get_closest(destination_coordinates.position, found_portals)
-        game.print("found a portal on nauvis!")
+        -- game.print("found a portal on nauvis!")
         return closest_portal
       else
         local new_portal = create_portal(traveler, destination_coordinates)
-        game.print("no portal found on nauvis, created new one!")
+        -- game.print("no portal found on nauvis, created new one!")
         return new_portal
       end
     else
       game.surfaces["nauvis"].request_to_generate_chunks(chunk_position, 3)
       game.surfaces["nauvis"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
-      game.print("no portal found on nauvis, created new one!")
+      -- game.print("no portal found on nauvis, created new one!")
       return new_portal
     end
   elseif destination_coordinates.surface == "nether" then
@@ -221,18 +221,18 @@ function find_portal(traveler, destination_coordinates)
       })
       if found_portals[1] then
         local closest_portal = game.surfaces["nether"].get_closest(destination_coordinates.position, found_portals)
-        game.print("found a portal in the nether!")
+        -- game.print("found a portal in the nether!")
         return closest_portal
       else
         local new_portal = create_portal(traveler, destination_coordinates)
-        game.print("no portal found in the nether, created new one!")
+        -- game.print("no portal found in the nether, created new one!")
         return new_portal
       end
     else
       game.surfaces["nether"].request_to_generate_chunks(chunk_position, 3)
       game.surfaces["nether"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
-      game.print("no portal found in the nether, created new one!")
+      -- game.print("no portal found in the nether, created new one!")
       return new_portal
     end
   end
@@ -275,7 +275,7 @@ end
 
 -- creates landmine when portal is placed by player
 script.on_event(defines.events.on_built_entity, function(event)
-  game.print("player built entity")
+  -- game.print("player built entity")
   if event.created_entity.name == "nether-portal" then
     event.created_entity.surface.create_entity(
     {
