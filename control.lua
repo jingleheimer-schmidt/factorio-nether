@@ -1,9 +1,9 @@
 
 -- CREATE "NETHER" SURFACE THE FIRST TIME MOD IS LOADED
--- ADD SUPPORT FOR ALIEN BIOMES "HELL" AT SOME POINT?
--- ALSO CUSTOMIZE VANILLA WORLD GEN, MAYBE DESERT ONLY? NO TREES OR WATER
 script.on_init(function()
   game.create_surface("nether")
+-- OPTIONAL DEPENDENCY/SUPPORT FOR ALIEN BIOMES AT SOME POINT?
+-- CUSTOMIZE VANILLA WORLD GEN, MAYBE DESERT ONLY? NO TREES OR WATER
 end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
@@ -12,8 +12,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     game.print("trigger created entity was not landmine sticker")
     return
   end
-  local sticker = event.entity
-  local player = sticker.sticked_to.player
+  local player = event.entity.sticked_to.player
 -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
   if global.teleport_cooldown then
     if global.teleport_cooldown[player.index] then
@@ -39,14 +38,12 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     global.teleport_soon = {}
     global.teleport_soon[player.index] = {
       player = player,
-      sticker = sticker,
       tick = event.tick + 240
     }
     game.print("global.teleport_soon set")
   else
     global.teleport_soon[player.index] = {
       player = player,
-      sticker = sticker,
       tick = event.tick + 240
     }
     game.print("global.teleport_soon set")
