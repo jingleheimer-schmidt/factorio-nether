@@ -1,9 +1,23 @@
 
 -- CREATE "NETHER" SURFACE THE FIRST TIME MOD IS LOADED
 script.on_init(function()
-  game.create_surface("nether")
--- OPTIONAL DEPENDENCY/SUPPORT FOR ALIEN BIOMES AT SOME POINT?
--- CUSTOMIZE VANILLA WORLD GEN, MAYBE DESERT ONLY? NO TREES OR WATER
+  -- OPTIONAL DEPENDENCY/SUPPORT FOR ALIEN BIOMES AT SOME POINT?
+  -- CUSTOMIZE VANILLA WORLD GEN, MAYBE DESERT ONLY? NO TREES OR WATER
+  local nether_settings = game.surfaces["nauvis"].map_gen_settings
+  local nether_scale = settings.startup["nether-scale-setting"].value
+  nether_settings.width = nether_settings.width / nether_scale
+  nether_settings.height = nether_settings.height / nether_scale
+  nether_settings.water = 0
+  nether_settings.property_expression_names["tile:water:probability"] = -1000
+  nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
+  nether_settings.property_expression_names["tile:water-green:probability"] = -1000
+  nether_settings.property_expression_names["tile:deepwater-green:probability"] = -1000
+  nether_settings.property_expression_names["tile:water-shallow:probability"] = -1000
+  nether_settings.property_expression_names["tile:water-mud:probability"] = -1000
+  -- these two might not work... tbd
+  nether_settings.property_expression_names["temperature"] = 50
+  nether_settings.property_expression_names["moisture"] = 0
+  game.create_surface("nether", nether_settings)
 end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
