@@ -241,13 +241,36 @@ local netherPortalLandmineSticker = {
   --icon = "__base__/graphics/icons/slowdown-sticker.png",
   flags = {},
   animation = util.empty_sprite(),
-  duration_in_ticks = 10,
+  duration_in_ticks = 6,
   --target_movement_modifier = 1
 }
+
+local dataRawPortalLandmine = util.table.deepcopy(data.raw["land-mine"]["land-mine"])
+dataRawPortalLandmine.name = "nether-portal-landmine"
+dataRawPortalLandmine.max_health = 99999
+dataRawPortalLandmine.force_die_on_attack = "false"
+dataRawPortalLandmine.trigger_radius = 1.25
+dataRawPortalLandmine.trigger_force = "all"
+-- dataRawPortalLandmine.timeout = 2
+dataRawPortalLandmine.action = {
+  type = "direct",
+  action_delivery = {
+    type = "instant",
+    target_effects = {
+      {
+        type = "create-sticker",
+        sticker = "nether-portal-landmine-sticker",
+        trigger_created_entity = true
+      }
+    }
+  }
+}
+
 
 data:extend({
   netherPortal,
   netherPortalItem,
-  netherPortalLandmine,
+  -- netherPortalLandmine,
+  dataRawPortalLandmine,
   netherPortalLandmineSticker
 })
