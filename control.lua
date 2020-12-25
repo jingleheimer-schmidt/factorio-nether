@@ -22,13 +22,19 @@ end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
 -- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
+  game.print(game.tick .. "landmine created entity")
+  if not event.entity.type == "character" then
+    game.print("entity is not character")
+    return
+  end
   if not event.entity.name == "nether-portal-landmine-sticker" then
     game.print("trigger created entity was not landmine sticker")
     return
   end
+  game.print(game.tick .. "landmine triggered")
   local player = event.entity.sticked_to.player
 -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
-  game.print(game.tick .. "landmine triggered")
+  -- game.print(game.tick .. "landmine triggered")
   if global.teleport_cooldown then
     if global.teleport_cooldown[player.index] then
       -- game.print("cooldown active, no sound, no trigger")
