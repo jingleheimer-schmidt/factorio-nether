@@ -21,12 +21,13 @@ script.on_init(function()
 end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
--- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
-  game.print(game.tick .. "landmine created entity")
-  if not ((event.entity.sticked_to.type == "character") or (event.entity.sticked_to.type == "player")) then
+-- MAKE SURE THE ENTITY WHO GOT STICKERED IS PLAYER CHARACTER
+  -- game.print(game.tick .. "landmine created entity")
+  if not (event.entity.sticked_to.type == "character") then
     game.print("entity is not character")
     return
   end
+-- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
   if not event.entity.name == "nether-portal-landmine-sticker" then
     game.print("trigger created entity was not landmine sticker")
     return
