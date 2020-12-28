@@ -326,7 +326,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
     local found_landmine = event.entity.surface.find_entities_filtered(
       {
         position = event.entity.position,
-        radius = 1,
+        -- radius = 1,
         name = "nether-portal-landmine",
         limit = 1
       })
@@ -344,7 +344,25 @@ script.on_event(defines.events.on_robot_mined_entity, function(event)
     local found_landmine = event.entity.surface.find_entities_filtered(
       {
         position = event.entity.position,
-        radius = 1,
+        -- radius = 1,
+        name = "nether-portal-landmine",
+        limit = 1
+      })
+      -- game.print("landmine found (robot mined portal)")
+    if found_landmine[1] then
+      found_landmine[1].destroy()
+      -- game.print("landmine destroyed (robot mined portal)")
+    end
+  end
+end)
+
+-- destroys landmine when portal is killed
+script.on_event(defines.events.on_entity_died, function(event)
+  if event.entity.name == "nether-portal" then
+    local found_landmine = event.entity.surface.find_entities_filtered(
+      {
+        position = event.entity.position,
+        -- radius = 1,
         name = "nether-portal-landmine",
         limit = 1
       })
