@@ -94,6 +94,18 @@ local netherPortal = {
   map_color = {r=142, g=70, b=218}, -- don't define alpha
   remove_decoratives = "true",
   allow_copy_paste = "false",
+  working_sound =
+  {
+    sound =
+    {
+      filename = "__factorio-nether__/sounds/portal.ogg",
+      volume = 0.75
+    },
+    audible_distance_modifier = 0.8,
+    probability = 1 / (2 * 60) -- average pause between the sound is 2 seconds
+    fade_in_ticks = 4,
+    fade_out_ticks = 20
+  },
   -- trigger_radius = 2,
   -- timeout = 230,
   -- action =
