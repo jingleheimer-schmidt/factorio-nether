@@ -102,7 +102,7 @@ local netherPortal = {
       volume = 0.75
     },
     audible_distance_modifier = 0.8,
-    probability = 1 / (2 * 60) -- average pause between the sound is 2 seconds
+    probability = 1 / (2 * 60), -- average pause between the sound is 2 seconds
     fade_in_ticks = 4,
     fade_out_ticks = 20
   },
@@ -278,11 +278,77 @@ dataRawPortalLandmine.action = {
   }
 }
 
+local portalParticleAnimation = {
+  name = "nether-portal-particle-animation",
+  type = "animation",
+  filename = "__factorio-nether__/graphics/particles/nether_portal_particles.png",
+  size = 8,
+  scale = 4,
+  frame_count = 8,
+  animation_speed = 1/8,
+  tint = {r=161, g=52, b=235, a=.5},
+  draw_as_glow = true
+}
+
+local portalOptimizedParticle = {
+  name = "nether-portal-optimized-particle",
+  type = "optimized-particle",
+  pictures = {
+    filename = "__factorio-nether__/graphics/particles/nether_portal_particles.png",
+    size = 8,
+    scale = 4,
+    frame_count = 8,
+    animation_speed = 1/8,
+    tint = {r=161, g=52, b=235, a=.5},
+    -- draw_as_glow = true
+  },
+  life_time = 64,
+}
+
+local portalTrivialSmokeParticles = {
+  name = "nether-portal-trivial-smoke-particles",
+  type = "trivial-smoke",
+  animation = {
+    filename = "__factorio-nether__/graphics/particles/nether_portal_particles.png",
+    size = 8,
+    scale = 4,
+    frame_count = 8,
+    animation_speed = 1/8,
+    tint = {r=161, g=52, b=235, a=1},
+  },
+  duration = 64,
+}
+
+local portalParticleSource = {
+  name = "nether-portal-particle-source",
+  type = "particle-source",
+  height = 1,
+  -- height_deviation = .5,
+  horizontal_speed = .05,
+  -- horizontal_speed_deviation = .5,
+  time_before_start = 100,
+  time_to_live = 600,
+  vertical_speed = .05,
+  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
+  icon_size = 250,
+  -- particle = "nether-portal-optimized-particle",
+  smoke = {{
+    name = "nether-portal-trivial-smoke-particles",
+    frequency = .5,
+    height_deviation = 1,
+    -- offset = 1,
+  }},
+}
+
 
 data:extend({
   netherPortal,
   netherPortalItem,
   -- netherPortalLandmine,
   dataRawPortalLandmine,
-  netherPortalLandmineSticker
+  netherPortalLandmineSticker,
+  portalParticleAnimation,
+  portalOptimizedParticle,
+  portalTrivialSmokeParticles,
+  portalParticleSource
 })

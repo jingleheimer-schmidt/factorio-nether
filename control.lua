@@ -304,7 +304,17 @@ script.on_event(defines.events.on_built_entity, function(event)
       name = "nether-portal-landmine",
       position = event.created_entity.position
     })
+    -- rendering.draw_animation{
+    --   animation = "nether-portal-particle-animation",
+    --   target = event.created_entity,
+    --   surface = event.created_entity.surface
+    -- }
     -- game.print("landmine built (player placed portal)")
+    event.created_entity.surface.create_entity(
+    {
+      name = "nether-portal-particle-source",
+      position = event.created_entity.position
+    })
   end
 end)
 
