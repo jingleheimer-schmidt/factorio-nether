@@ -1,8 +1,8 @@
 local netherPortal = {
   type = "simple-entity",
   name = "nether-portal",
-  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
-  icon_size = 250,
+  icon = "__factorio-nether__/graphics/nether_portal_icon.png",
+  icon_size = 904,
   animations = {
     sheets = {
       {
@@ -129,122 +129,41 @@ local netherPortal = {
     mining_time = 1,
     result = "nether-portal-item"
   },
+  max_health = 64000,
   flags = {
     "placeable-neutral",
     "placeable-player",
     "player-creation",
     "not-upgradable",
     "no-copy-paste",
-    "not-blueprintable"
+    "not-blueprintable",
+    "not-deconstructable",
   }
 }
 
 local netherPortalItem = {
   type = "item",
   name = "nether-portal-item",
-  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
-  icon_size = 250,
+  icon = "__factorio-nether__/graphics/nether_portal_icon.png",
+  icon_size = 904,
   stack_size = 1,
-  place_result = "nether-portal"
+  place_result = "nether-portal",
+  subgroup = "space-related",
+order = "q[nether-portal]",
 }
 
-local netherPortalLandmine = {
-  type = "land-mine",
-  name = "nether-portal-landmine",
-  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
-  icon_size = 250,
-  flags =
-  {
-    "placeable-player",
-    "placeable-enemy",
-    "player-creation",
-    -- "placeable-off-grid",
-    "not-on-map"
+local netherPortalRecipe = {
+  type = "recipe",
+  name = "nether-portal-recipe",
+  category = "advanced-crafting",
+  energy_required = 64,
+  ingredients = {
+    {type = "item", name = "obsidian", amount = 10},
+    {type = "item", name = "steel-plate", amount = 1},
+    {type = "item", name = "flamethrower-ammo", amount = 1}
   },
-  minable = {
-    mining_time = 16,
-    result = "nether-portal-item"
-  },
-  -- mined_sound = { filename = "__core__/sound/deconstruct-small.ogg" },
-  -- max_health = 15,
-  -- corpse = "land-mine-remnants",
-  -- dying_explosion = "land-mine-explosion",
-  collision_box = {{-2, -2.5}, {2, 2.5}},
-  selection_box = {{-2, -2.5}, {2, 2.5}},
-  -- damaged_trigger_effect = hit_effects.entity(),
-  -- open_sound = sounds.machine_open,
-  -- close_sound = sounds.machine_close,
-  picture_safe =
-  {
-    filename = "__base__/graphics/entity/land-mine/hr-land-mine.png",
-    priority = "medium",
-    width = 64,
-    height = 64,
-    scale = 0.5
-  },
-  picture_set =
-  {
-    filename = "__base__/graphics/entity/land-mine/hr-land-mine-set.png",
-    priority = "medium",
-    width = 64,
-    height = 64,
-    scale = 0.5
-  },
-  picture_set_enemy =
-  {
-    filename = "__base__/graphics/entity/land-mine/land-mine-set-enemy.png",
-    priority = "medium",
-    width = 32,
-    height = 32
-  },
-  trigger_radius = 4,
-  trigger_force = "all",
-  timeout = 1,
-  ammo_category = "landmine",
-  force_die_on_attack = "false",
-  action =
-  -- {
-  --   -- runs the teleport script when landmine "explodes":
-  --   type = "direct",
-  --   action_delivery =
-  --   {
-  --     type = "instant",
-  --     target_effects = {
-  --       type = "script",
-  --       effect_id = "portal-landmine-trigger"
-  --       }
-  --   }
-  -- }
-  {
-    type = "direct",
-    action_delivery =
-    {
-      type = "instant",
-      target_effects =
-      -- {
-      --   {
-      --     type = "nested-result",
-      --     affects_target = true,
-      --     action =
-      --     {
-      --       type = "direct",
-      --       action_delivery =
-      --       {
-      --         type = "instant",
-      --         target_effects =
-              {
-                {
-                  type = "create-sticker",
-                  sticker = "nether-portal-landmine-sticker",
-                  trigger_created_entity = true
-                }
-              }
-      --       }
-      --     }
-      --   }
-      -- }
-    }
-  }
+  result = "nether-portal-item",
+  enabled = false,
 }
 
 local netherPortalLandmineSticker = {
@@ -264,6 +183,9 @@ dataRawPortalLandmine.force_die_on_attack = "false"
 dataRawPortalLandmine.trigger_radius = 1.25
 -- dataRawPortalLandmine.trigger_force = "all"
 -- dataRawPortalLandmine.timeout = 2
+dataRawPortalLandmine.picture_safe = util.empty_sprite()
+dataRawPortalLandmine.picture_set = util.empty_sprite()
+dataRawPortalLandmine.picture_set_enemy = util.empty_sprite()
 dataRawPortalLandmine.action = {
   type = "direct",
   action_delivery = {
@@ -322,21 +244,31 @@ local portalTrivialSmokeParticles = {
 local portalParticleSource = {
   name = "nether-portal-particle-source",
   type = "particle-source",
-  height = 1,
+  height = .1,
   -- height_deviation = .5,
-  horizontal_speed = .05,
-  -- horizontal_speed_deviation = .5,
-  time_before_start = 100,
-  time_to_live = 600,
-  vertical_speed = .05,
+  horizontal_speed = .25,
+  horizontal_speed_deviation = .5,
+  time_before_start = 0,
+  time_to_live = 240,
+  vertical_speed = .075,
   icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
   icon_size = 250,
   -- particle = "nether-portal-optimized-particle",
   smoke = {{
     name = "nether-portal-trivial-smoke-particles",
-    frequency = .5,
-    height_deviation = 1,
-    -- offset = 1,
+    -- frequency = .25,
+    -- height_deviation = 1,
+    -- -- offset = 1,
+    north_position = {0,-1},
+    east_position = {1,0},
+    south_position = {0,1},
+    west_position = {-1,0},
+    frequency = 0.25, --0.25,
+    position = {0.0, 0}, -- -0.8},
+    starting_frame_deviation = 30,
+    starting_vertical_speed = 0.025,
+    starting_vertical_speed_deviation = 0.01,
+    vertical_speed_slowdown = 1, -- 0.99
   }},
 }
 
@@ -344,11 +276,11 @@ local portalParticleSource = {
 data:extend({
   netherPortal,
   netherPortalItem,
-  -- netherPortalLandmine,
+  netherPortalRecipe,
   dataRawPortalLandmine,
   netherPortalLandmineSticker,
-  portalParticleAnimation,
-  portalOptimizedParticle,
-  portalTrivialSmokeParticles,
-  portalParticleSource
+  -- portalParticleAnimation,
+  -- portalOptimizedParticle,
+  -- portalTrivialSmokeParticles,
+  -- portalParticleSource
 })

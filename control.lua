@@ -24,15 +24,15 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 -- MAKE SURE THE ENTITY WHO GOT STICKERED IS PLAYER CHARACTER
   -- game.print(game.tick .. "landmine created entity")
   if not (event.entity.sticked_to.type == "character") then
-    game.print("entity is not character")
+    -- game.print("entity is not character")
     return
   end
 -- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
   if not event.entity.name == "nether-portal-landmine-sticker" then
-    game.print("trigger created entity was not landmine sticker")
+    -- game.print("trigger created entity was not landmine sticker")
     return
   end
-  game.print(game.tick .. "landmine triggered")
+  -- game.print(game.tick .. "landmine triggered")
   local player = event.entity.sticked_to.player
 -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
   -- game.print(game.tick .. "landmine triggered")
@@ -159,6 +159,22 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
+    -- traveler.surface.create_entity(
+    -- {
+    --   name = "nether-portal-particle-source",
+    --   position = traveler.position
+    -- })
+    -- traveler.surface.create_particle(
+  --   traveler.surface.create_trivial_smoke(
+  --   {
+  --     name = "nether-portal-trivial-smoke-particles",
+  --     position = traveler.position,
+  --     -- movement = {1,1},
+  --     -- height = 1,
+  --     -- vertical_speed = .25,
+  --     -- frame_speed = 1,
+  --   }
+  -- )
   elseif current_surface.name == "nether" then
     local destination_coordinates = calculate_coordinates(traveler)
     local destination_portal = find_portal(traveler, destination_coordinates)
@@ -169,6 +185,11 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
+    -- traveler.surface.create_entity(
+    -- {
+    --   name = "nether-portal-particle-source",
+    --   position = traveler.position
+    -- })
   end
 end
 
@@ -185,6 +206,8 @@ function calculate_coordinates(traveler)
       surface = "nether"
     }
     -- game.print("calculated coordinates")
+    -- game.print("from: "..serpent.block(traveler.position))
+    -- game.print("to: "..serpent.block(destination_coordinates))
     return destination_coordinates
   elseif current_surface.name == "nether" then
     local destination_coordinates = {
@@ -194,7 +217,9 @@ function calculate_coordinates(traveler)
       },
       surface = "nauvis"
     }
-    -- game.print("calculated coordinates")
+    -- -- game.print("calculated coordinates")
+    -- game.print("from: "..serpent.block(traveler.position))
+    -- game.print("to: "..serpent.block(destination_coordinates))
     return destination_coordinates
   end
 end
@@ -223,7 +248,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nauvis"].request_to_generate_chunks(chunk_position, 3)
+      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 8)
       game.surfaces["nauvis"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found on nauvis, created new one!")
@@ -251,7 +276,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nether"].request_to_generate_chunks(chunk_position, 3)
+      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 8)
       game.surfaces["nether"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found in the nether, created new one!")
@@ -263,31 +288,31 @@ end
 -- create a new portal
 function create_portal(traveler, destination_coordinates)
   if destination_coordinates.surface == "nauvis" then
-    local new_portal_position = game.surfaces["nauvis"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1)
-    local new_portal = game.surfaces["nauvis"].create_entity(
-    {
-      name = "nether-portal",
-      position = new_portal_position,
-      player = traveler
-    })
+    local new_portal_position = game.surfaces["nauvis"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1, true)
     game.surfaces["nauvis"].create_entity(
     {
       name = "nether-portal-landmine",
       position = new_portal_position,
       player = traveler
     })
-    return new_portal
-  elseif destination_coordinates.surface == "nether" then
-    local new_portal_position = game.surfaces["nether"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1)
-    local new_portal = game.surfaces["nether"].create_entity(
+    local new_portal = game.surfaces["nauvis"].create_entity(
     {
       name = "nether-portal",
       position = new_portal_position,
       player = traveler
     })
+    return new_portal
+  elseif destination_coordinates.surface == "nether" then
+    local new_portal_position = game.surfaces["nether"].find_non_colliding_position("nether-portal", destination_coordinates.position, 0, 1, true)
     game.surfaces["nether"].create_entity(
     {
       name = "nether-portal-landmine",
+      position = new_portal_position,
+      player = traveler
+    })
+    local new_portal = game.surfaces["nether"].create_entity(
+    {
+      name = "nether-portal",
       position = new_portal_position,
       player = traveler
     })
@@ -310,11 +335,11 @@ script.on_event(defines.events.on_built_entity, function(event)
     --   surface = event.created_entity.surface
     -- }
     -- game.print("landmine built (player placed portal)")
-    event.created_entity.surface.create_entity(
-    {
-      name = "nether-portal-particle-source",
-      position = event.created_entity.position
-    })
+    -- event.created_entity.surface.create_entity(
+    -- {
+    --   name = "nether-portal-particle-source",
+    --   position = event.created_entity.position
+    -- })
   end
 end)
 
