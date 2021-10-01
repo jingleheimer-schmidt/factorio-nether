@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 30SEP2021
+  Changes:
+    - Fixed that turrets would shoot the nether portals under certain conditions
+---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 20JUN2021
   Changes:
