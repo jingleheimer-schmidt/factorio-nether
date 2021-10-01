@@ -45,6 +45,7 @@ lava_tile_deepcopy.pollution_absorption_per_second = -0.05
 lava_tile_deepcopy.effect = "water"
 lava_tile_deepcopy.effect_color = {239, 83, 18, }
 lava_tile_deepcopy.effect_color_secondary = {255, 208, 0, }
+lava_tile_deepcopy.effect_is_opaque = false
 -- lava_tile_deepcopy.layer_group = "water"
 -- lava_tile_deepcopy.draw_in_water_layer = true
 -- lava_tile_deepcopy.draw_in_water_layer = false

@@ -327,7 +327,7 @@ script.on_event(defines.events.on_built_entity, function(event)
     event.created_entity.surface.create_entity(
     {
       name = "nether-portal-landmine",
-      position = event.created_entity.position
+      position = event.created_entity.position,
     })
     -- rendering.draw_animation{
     --   animation = "nether-portal-particle-animation",
