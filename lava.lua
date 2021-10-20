@@ -6,52 +6,96 @@ lava_tile_deepcopy.name = "lava"
 -- lava_tile_deepcopy.layer = data.raw.tile.water.layer
 lava_tile_deepcopy.variants.main = {
   {
-    picture = "__factorio-nether__/graphics/lava/lava1.png",
-    count = 1,
+    picture = "__factorio-nether__/graphics/nether_lava_1x1.png",
+    count = 10,
     size = 1,
-    hr_version = {
-      picture = "__factorio-nether__/graphics/lava/hr-lava1.png",
-      count = 1,
-      scale = 0.5,
-      size = 1,
-    },
+    x = 0,
+    y = 0,
+    -- line_length = 16,
+
+    -- hr_version = {
+    --   picture = "__factorio-nether__/graphics/lava/hr-lava1.png",
+    --   count = 8,
+    --   scale = 0.5,
+    --   size = 1,
+    -- },
   },
-  {
-    picture = "__factorio-nether__/graphics/lava/lava2.png",
-    count = 1,
-    size = 2,
-    hr_version = {
-      picture = "__factorio-nether__/graphics/lava/hr-lava2.png",
-      count = 1,
-      scale = 0.5,
-      size = 2,
-    },
-  },
-  {
-    picture = "__factorio-nether__/graphics/lava/lava4.png",
-    count = 1,
-    size = 4,
-    hr_version =
-    {
-      picture = "__factorio-nether__/graphics/lava/hr-lava4.png",
-      count = 1,
-      scale = 0.5,
-      size = 4,
-    },
-  },
+  -- {
+  --   picture = "__factorio-nether__/graphics/nether_lava_2x2.png",
+  --   count = 10,
+  --   size = 2,
+  --   x = 0,
+  --   y = 0,
+  --   -- line_length = 16,
+  --
+  --   -- hr_version = {
+  --   --   picture = "__factorio-nether__/graphics/lava/hr-lava1.png",
+  --   --   count = 8,
+  --   --   scale = 0.5,
+  --   --   size = 1,
+  --   -- },
+  -- },
+  -- {
+  --   picture = "__factorio-nether__/graphics/nether_lava_4x4.png",
+  --   count = 10,
+  --   size = 4,
+  --   x = 0,
+  --   y = 0,
+  --   -- line_length = 16,
+  --
+  --   -- hr_version = {
+  --   --   picture = "__factorio-nether__/graphics/lava/hr-lava1.png",
+  --   --   count = 8,
+  --   --   scale = 0.5,
+  --   --   size = 1,
+  --   -- },
+  -- },
+  -- {
+  --   picture = "__factorio-nether__/graphics/lava/lava1.png",
+  --   count = 8,
+  --   size = 1,
+  --   hr_version = {
+  --     picture = "__factorio-nether__/graphics/lava/hr-lava1.png",
+  --     count = 8,
+  --     scale = 0.5,
+  --     size = 1,
+  --   },
+  -- },
+  -- {
+  --   picture = "__factorio-nether__/graphics/lava/lava2.png",
+  --   count = 8,
+  --   size = 2,
+  --   hr_version = {
+  --     picture = "__factorio-nether__/graphics/lava/hr-lava2.png",
+  --     count = 8,
+  --     scale = 0.5,
+  --     size = 2,
+  --   },
+  -- },
+  -- {
+  --   picture = "__factorio-nether__/graphics/lava/lava4.png",
+  --   count = 8,
+  --   size = 4,
+  --   hr_version =
+  --   {
+  --     picture = "__factorio-nether__/graphics/lava/hr-lava4.png",
+  --     count = 8,
+  --     scale = 0.5,
+  --     size = 4,
+  --   },
+  -- },
 }
 lava_tile_deepcopy.map_color = {239, 83, 18, }
 lava_tile_deepcopy.pollution_absorption_per_second = -0.05
 lava_tile_deepcopy.effect = "water"
-lava_tile_deepcopy.effect_color = {239, 83, 18, }
+lava_tile_deepcopy.effect_color = {239, 83, 18, 155}
 lava_tile_deepcopy.effect_color_secondary = {255, 208, 0, }
 lava_tile_deepcopy.effect_is_opaque = false
+-- lava_tile_deepcopy.autoplace.tile_restriction = {"nether", }
 -- lava_tile_deepcopy.layer_group = "water"
 -- lava_tile_deepcopy.draw_in_water_layer = true
 -- lava_tile_deepcopy.draw_in_water_layer = false
-
 -- data.raw.tile.water.effect_color = {255, 80, 0, }
-
 -- lava_tile_deepcopy.variants.inner_corner_mask = nil
 -- lava_tile_deepcopy.variants.outer_corner_mask = nil
 -- lava_tile_deepcopy.variants.side_mask = nil
@@ -59,6 +103,7 @@ lava_tile_deepcopy.effect_is_opaque = false
 -- lava_tile_deepcopy.variants.o_transition_mask = nil
 -- lava_tile_deepcopy.variants.material_background = nil
 --
+
 -- local lava_tile = {
 --   name = "lava",
 --   type = "tile",
