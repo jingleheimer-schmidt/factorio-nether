@@ -7,7 +7,8 @@ script.on_init(function()
   local nether_scale = settings.startup["nether-scale-setting"].value
   nether_settings.width = nether_settings.width / nether_scale
   nether_settings.height = nether_settings.height / nether_scale
-  nether_settings.water = 0
+  -- nether_settings.water = 0
+  nether_settings.property_expression_names["tile:lava:probability"] = 100
   nether_settings.property_expression_names["tile:water:probability"] = -1000
   nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
   nether_settings.property_expression_names["tile:water-green:probability"] = -1000

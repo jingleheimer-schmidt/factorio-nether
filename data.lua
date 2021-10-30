@@ -2,4 +2,6 @@ require("nether-portal")
 require("obsidian")
 require("technology")
 require("sounds")
-require("lava")
+if not mods["alien-biomes"] then
+  require("lava")
+end

@@ -91,6 +91,7 @@ lava_tile_deepcopy.effect = "water"
 lava_tile_deepcopy.effect_color = {239, 83, 18, 155}
 lava_tile_deepcopy.effect_color_secondary = {255, 208, 0, }
 lava_tile_deepcopy.effect_is_opaque = false
+lava_tile_deepcopy.autoplace.default_enabled = false
 -- lava_tile_deepcopy.autoplace.tile_restriction = {"nether", }
 -- lava_tile_deepcopy.layer_group = "water"
 -- lava_tile_deepcopy.draw_in_water_layer = true
@@ -160,14 +161,32 @@ lava_tile_deepcopy.effect_is_opaque = false
 --   pollution_absorption_per_second = -0.05,
 -- }
 
+local function is_water_variant(array)
+  local output = false
+  local variants = {
+    "water",
+    "water-shallow",
+    "deepwater",
+    "water-mud",
+    "water-green",
+    "deepwater-green",
+  }
+  for a,b in pairs(array) do
+    for c,d in pairs(variants) do
+      if b == d then
+        output = true
+      end
+    end
+  end
+  return output
+end
+
 for a,b in pairs(data.raw.tile) do
   if b.transitions then
     for c,d in pairs(b.transitions) do
       if d.to_tiles then
-        for e,f in pairs(d.to_tiles) do
-          if f == "water" then
-            table.insert(data.raw.tile[a].transitions[c].to_tiles, "lava")
-          end
+        if is_water_variant(d.to_tiles) then
+          table.insert(data.raw.tile[a].transitions[c].to_tiles, "lava")
         end
       end
     end
