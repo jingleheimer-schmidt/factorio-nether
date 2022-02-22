@@ -7,17 +7,49 @@ script.on_init(function()
   local nether_scale = settings.startup["nether-scale-setting"].value
   nether_settings.width = nether_settings.width / nether_scale
   nether_settings.height = nether_settings.height / nether_scale
-  nether_settings.water = 0
-  nether_settings.property_expression_names["tile:water:probability"] = -1000
-  nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-green:probability"] = -1000
-  nether_settings.property_expression_names["tile:deepwater-green:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-shallow:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-mud:probability"] = -1000
-  -- these two might not work... tbd
-  nether_settings.property_expression_names["temperature"] = 50
+  nether_settings.seed = math.random(0, 2394967295)
+  -- 0 to 4,294,967,295
+  -- nether_settings.water = 0
+  -- nether_settings.property_expression_names["tile:water:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-green:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:deepwater-green:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-shallow:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-mud:probability"] = -1000
+  -- -- these two might not work... tbd
+  nether_settings.property_expression_names["temperature"] = 150
   nether_settings.property_expression_names["moisture"] = 0
+  -- for a,b in pairs(data.raw.tile) do
+  --   if not (string.find(b.name, "volcanic") or string.find(b.name, "hot")) then
+  --     local temp = "tile:" .. b.name .. ":probability"
+  --     nether_settings.property_expression_names[temp] = -1000
+  --   end
+  -- end
   game.create_surface("nether", nether_settings)
+end)
+
+script.on_event(defines.events.on_chunk_generated, function(event)
+  if event.surface and event.surface.name == "nether" then
+    local chunk_area = event.area
+    local chunk_position = event.position
+    local surface = event.surface
+    local water_tiles = surface.find_tiles_filtered({area = chunk_area, name = {"water", "water-mud", "water-shallow", "water-green", "deepwater", "deepwater-green"}})
+    if water_tiles then
+      local lava_tiles = {}
+      for each, water_tile in pairs(water_tiles) do
+        local data = {
+          name = "lava",
+          position = water_tile.position
+        }
+        table.insert(lava_tiles, data)
+      end
+      surface.set_tiles(lava_tiles)
+      local fishies = surface.find_entities_filtered({area = chunk_area, type = "fish"})
+      for each, fish in pairs(fishies) do
+        fish.die()
+      end
+    end
+  end
 end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
