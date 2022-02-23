@@ -206,7 +206,7 @@ local lava_fluid = {
   heat_capacity = "0.64KJ",
   base_color = {r=239, g=83, b=18},
   -- flow_color = {r=0.7, g=0.7, b=0.7},
-  flow_color = {r=0.85, g=0.6, b=0.3} -- same as heavy oil
+  flow_color = {r=0.85, g=0.6, b=0.3}, -- same as heavy oil
   icon = "__factorio-nether__/graphics/lava_icon.png",
   icon_size = 64, icon_mipmaps = 4,
   order = "a[fluid]-z[lava]"
