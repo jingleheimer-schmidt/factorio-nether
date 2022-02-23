@@ -15,6 +15,22 @@ local obsidian_recipe = {
   enabled = false,
 }
 
+local obsidian_from_lava_recipe = {
+  type = "recipe",
+  name = "lava-water-obsidian-recipe",
+  category = "advanced-crafting",
+  energy_required = 64,
+  ingredients = {
+    {type = "fluid", name = "lava", amount = 64},
+    {type = "fluid", name = "water", amount = 64}
+  },
+  result = "obsidian",
+  subgroup = "raw-material",
+  order = "l[obsidian]", -- l ordering so it shows up after uranium-processing which is k ordering
+  enabled = false,
+  hide_from_player_crafting = true,
+}
+
 local obsidianItem = {
   type = "item",
   name = "obsidian",
@@ -41,5 +57,6 @@ local obsidianItem = {
 
 data:extend({
   obsidian_recipe,
+  obsidian_from_lava_recipe,
   obsidianItem,
 })
