@@ -194,9 +194,19 @@ for a,b in pairs(data.raw.tile) do
   end
 end
 
+local deepcopy_lava_pump = util.table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
+deepcopy_lava_pump.name = "offshore-lava-pump"
+deepcopy_lava_pump.fluid = "lava"
+deepcopy_lava_pump.fluid_box.filter = "lava"
+-- allow_copy_paste = true
+deepcopy_lava_pump.placeable_by = {
+  item = "offshore-pump",
+  count = 1
+}
 
 data:extend({
   -- lava_tile,
   lava_tile_deepcopy,
+  deepcopy_lava_pump
 })
 log(serpent.block(data.raw.tile.lava))
