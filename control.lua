@@ -178,6 +178,21 @@ function is_on_portal(traveler)
   end
 end
 
+function spawn_particle_cloud(surface, position)
+  for i = 1, 32 do
+    local random_1 = math.random(-2.500, 2.500)
+    local random_2 = math.random(-2.500, 2.500)
+    local new_position = {
+      x = position.x + random_1,
+      y = position.y + random_2
+    }
+    surface.create_trivial_smoke({
+      name = "nether-portal-trivial-smoke-particles",
+      position = new_position
+    })
+  end
+end
+
 -- teleport player through portal
 function into_portal(traveler)
   local current_surface = traveler.surface
@@ -191,6 +206,11 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
+    -- traveler.surface.create_trivial_smoke({
+    --   name = "nether-portal-trivial-smoke-particles",
+    --   position = traveler.position
+    -- })
+    spawn_particle_cloud(traveler.surface, traveler.position)
     -- traveler.surface.create_entity(
     -- {
     --   name = "nether-portal-particle-source",
@@ -217,11 +237,11 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
-    -- traveler.surface.create_entity(
-    -- {
-    --   name = "nether-portal-particle-source",
+    -- traveler.surface.create_trivial_smoke({
+    --   name = "nether-portal-trivial-smoke-particles",
     --   position = traveler.position
     -- })
+    spawn_particle_cloud(traveler.surface, traveler.position)
   end
 end
 
