@@ -194,6 +194,24 @@ for a,b in pairs(data.raw.tile) do
   end
 end
 
+-- local lava_fluid_deepcopy = util.table.deepcopy(data.raw.fluid["water"])
+-- lava_fluid_deepcopy.name = "lava"
+-- lava_fluid_deepcopy.base_color = {239, 83, 18, }
+-- lava_fluid_deepcopy.flow_color = {239, 83, 18, 155}
+local lava_fluid = {
+  type = "fluid",
+  name = "lava",
+  default_temperature = 150,
+  max_temperature = 300,
+  heat_capacity = "0.64KJ",
+  base_color = {r=239, g=83, b=18},
+  -- flow_color = {r=0.7, g=0.7, b=0.7},
+  flow_color = {r=0.85, g=0.6, b=0.3} -- same as heavy oil
+  icon = "__factorio-nether__/graphics/lava_icon.png",
+  icon_size = 64, icon_mipmaps = 4,
+  order = "a[fluid]-z[lava]"
+}
+
 local deepcopy_lava_pump = util.table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
 deepcopy_lava_pump.name = "offshore-lava-pump"
 deepcopy_lava_pump.fluid = "lava"
@@ -207,6 +225,8 @@ deepcopy_lava_pump.placeable_by = {
 data:extend({
   -- lava_tile,
   lava_tile_deepcopy,
+  -- lava_fluid_deepcopy,
+  lava_fluid,
   deepcopy_lava_pump
 })
-log(serpent.block(data.raw.tile.lava))
+-- log(serpent.block(data.raw.tile.lava))
