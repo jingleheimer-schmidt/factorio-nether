@@ -1,3 +1,3 @@
-if mods["alien-biomes"] then
-  require("lava")
-end
+-- if mods["alien-biomes"] then
+--   require("lava")
+-- end
