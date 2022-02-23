@@ -352,6 +352,33 @@ function create_portal(traveler, destination_coordinates)
   end
 end
 
+-- build a special lava version of the offshore-pump if it's placed on a lava tile
+function build_lava_pump(event)
+  local original_pump = event.created_entity
+  -- local player_index = event.player_index
+  local surface = original_pump.surface
+    -- game.print("searching for lava tiles")
+  local found_lava = original_pump.surface.find_tiles_filtered({position = original_pump.position, radius = 2, name = "lava"})
+  -- game.print(serpent.block(found_lava))
+  if found_lava[1] then
+    -- game.print("found lava tiles")
+    local lava_pump_data = {
+      name = "offshore-lava-pump",
+      surface = original_pump.surface,
+      position = original_pump.position,
+      force = original_pump.force,
+      direction = original_pump.direction,
+      player = original_pump.last_user,
+      raise_built = true,
+      create_build_effect_smoke = false,
+      move_stuck_players = true
+    }
+    original_pump.destroy()
+    surface.create_entity(lava_pump_data)
+    -- game.print("placed lava pump")
+  end
+end
+
 -- creates landmine when portal is placed by player
 script.on_event(defines.events.on_built_entity, function(event)
   -- game.print("player built entity")
@@ -372,7 +399,15 @@ script.on_event(defines.events.on_built_entity, function(event)
     --   name = "nether-portal-particle-source",
     --   position = event.created_entity.position
     -- })
+  elseif event.created_entity.name == "offshore-pump" then
+    build_lava_pump(event)
   end
+end)
+
+script.on_event(defines.events.script_raised_built, function(event)
+  local data = {}
+  data.created_entity = event.entity
+  build_lava_pump(data)
 end)
 
 -- creates landmine when portal is placed by robot
@@ -384,6 +419,8 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
       position = event.created_entity.position
     })
     -- game.print("landmine built (robot placed portal)")
+  elseif event.created_entity.name == "offshore-pump" then
+    build_lava_pump(event)
   end
 end)
 
