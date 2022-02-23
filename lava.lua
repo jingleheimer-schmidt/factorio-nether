@@ -86,7 +86,7 @@ lava_tile_deepcopy.variants.main = {
   -- },
 }
 lava_tile_deepcopy.map_color = {239, 83, 18, }
-lava_tile_deepcopy.pollution_absorption_per_second = -0.05
+lava_tile_deepcopy.pollution_absorption_per_second = -0.005
 lava_tile_deepcopy.effect = "water"
 lava_tile_deepcopy.effect_color = {239, 83, 18, 155}
 lava_tile_deepcopy.effect_color_secondary = {255, 208, 0, }
