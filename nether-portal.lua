@@ -279,8 +279,8 @@ data:extend({
   netherPortalRecipe,
   dataRawPortalLandmine,
   netherPortalLandmineSticker,
-  -- portalParticleAnimation,
-  -- portalOptimizedParticle,
-  -- portalTrivialSmokeParticles,
-  -- portalParticleSource
+  portalParticleAnimation,
+  portalOptimizedParticle,
+  portalTrivialSmokeParticles,
+  portalParticleSource
 })
