@@ -18,7 +18,7 @@ local obsidian_recipe = {
 local obsidian_from_lava_recipe = {
   type = "recipe",
   name = "lava-water-obsidian-recipe",
-  category = "advanced-crafting",
+  category = "chemistry",
   energy_required = 64,
   ingredients = {
     {type = "fluid", name = "lava", amount = 64},
