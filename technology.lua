@@ -23,6 +23,10 @@ local netherPortalTechnology = {
     {
       type  = "unlock-recipe",
       recipe = "obsidian-recipe"
+    },
+    {
+      type  = "unlock-recipe",
+      recipe = "lava-water-obsidian-recipe"
     }
   }
 }
