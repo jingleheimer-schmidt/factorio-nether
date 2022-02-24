@@ -377,11 +377,11 @@ function build_lava_pump(event)
   local original_pump = event.created_entity
   -- local player_index = event.player_index
   local surface = original_pump.surface
-    -- game.print("searching for lava tiles")
+    -- log("searching for lava tiles")
   local found_lava = original_pump.surface.find_tiles_filtered({position = original_pump.position, radius = 2, name = "lava"})
-  -- game.print(serpent.block(found_lava))
+  -- log(serpent.block(found_lava))
   if found_lava[1] then
-    -- game.print("found lava tiles")
+    -- log("found lava tiles")
     local lava_pump_data = {
       name = "offshore-lava-pump",
       surface = original_pump.surface,
@@ -394,8 +394,9 @@ function build_lava_pump(event)
       move_stuck_players = true
     }
     original_pump.destroy()
+    -- log("original pump destroyed")
     surface.create_entity(lava_pump_data)
-    -- game.print("placed lava pump")
+    -- log("placed lava pump")
   end
 end
 
@@ -425,9 +426,11 @@ script.on_event(defines.events.on_built_entity, function(event)
 end)
 
 script.on_event(defines.events.script_raised_built, function(event)
-  local data = {}
-  data.created_entity = event.entity
-  build_lava_pump(data)
+  if event.entity.name == "offshore-pump" then
+    local data = {}
+    data.created_entity = event.entity
+    build_lava_pump(data)
+  end
 end)
 
 -- creates landmine when portal is placed by robot
