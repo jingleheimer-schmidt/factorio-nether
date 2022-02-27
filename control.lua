@@ -104,6 +104,38 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
   end
 end)
 
+function fiery_lava()
+  for each, player in pairs(game.connected_players) do
+  -- local player = game.get_player(event.player_index)
+    if player.character then
+      local lava_tiles = player.surface.find_tiles_filtered({area = player.character.bounding_box, name = "lava"})
+      if lava_tiles[1] then
+        -- game.print("catch player on fire")
+        local fire = {
+          -- name = "fire-flame",
+          -- name = "fire-flame-on-tree",
+          name = "fire-sticker",
+          position = player.position,
+          -- direction,
+          force = "enemy",
+          target = player.character,
+          -- source,
+          -- fast_replace,
+          -- player,
+          -- spill,
+          raise_built = true,
+          create_build_effect_smoke = true,
+          spawn_decorations = true,
+          move_stuck_players = false,
+          -- item,
+          initial_ground_flame_count = 3,
+        }
+        player.surface.create_entity(fire)
+      end
+    end
+  end
+end
+
 script.on_event(defines.events.on_tick, function()
   if global.teleport_soon then
     for a,b in pairs(global.teleport_soon) do
@@ -156,6 +188,7 @@ script.on_event(defines.events.on_tick, function()
       -- game.print("global.teleport_cooldown cleared")
     end
   end
+  fiery_lava()
 end)
 
 -- is player on portal?
