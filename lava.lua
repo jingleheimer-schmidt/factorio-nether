@@ -7,7 +7,8 @@ lava_tile_deepcopy.name = "lava"
 lava_tile_deepcopy.variants.main = {
   {
     picture = "__factorio-nether__/graphics/nether_lava_1x1.png",
-    count = 10,
+    -- count = 10,
+    count = 5,
     size = 1,
     x = 0,
     y = 0,
@@ -163,37 +164,37 @@ lava_tile_deepcopy.autoplace.default_enabled = false
 --   pollution_absorption_per_second = -0.05,
 -- }
 
-local function is_water_variant(array)
-  local output = false
-  local variants = {
-    "water",
-    "water-shallow",
-    "deepwater",
-    "water-mud",
-    "water-green",
-    "deepwater-green",
-  }
-  for a,b in pairs(array) do
-    for c,d in pairs(variants) do
-      if b == d then
-        output = true
-      end
-    end
-  end
-  return output
-end
+-- local function is_water_variant(array)
+--   local output = false
+--   local variants = {
+--     "water",
+--     "water-shallow",
+--     "deepwater",
+--     "water-mud",
+--     "water-green",
+--     "deepwater-green",
+--   }
+--   for a,b in pairs(array) do
+--     for c,d in pairs(variants) do
+--       if b == d then
+--         output = true
+--       end
+--     end
+--   end
+--   return output
+-- end
 
-for a,b in pairs(data.raw.tile) do
-  if b.transitions then
-    for c,d in pairs(b.transitions) do
-      if d.to_tiles then
-        if is_water_variant(d.to_tiles) then
-          table.insert(data.raw.tile[a].transitions[c].to_tiles, "lava")
-        end
-      end
-    end
-  end
-end
+-- for a,b in pairs(data.raw.tile) do
+--   if b.transitions then
+--     for c,d in pairs(b.transitions) do
+--       if d.to_tiles then
+--         if is_water_variant(d.to_tiles) then
+--           table.insert(data.raw.tile[a].transitions[c].to_tiles, "lava")
+--         end
+--       end
+--     end
+--   end
+-- end
 
 -- local lava_fluid_deepcopy = util.table.deepcopy(data.raw.fluid["water"])
 -- lava_fluid_deepcopy.name = "lava"
