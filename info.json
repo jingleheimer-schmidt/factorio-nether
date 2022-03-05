@@ -1,9 +1,9 @@
 {
 	"name": "factorio-nether",
 	"version": "0.0.3",
-	"title": "Nether",
+	"title": "The Nether",
 	"description": "Adds the nether dimension, kind of like minecraft.",
 	"author": "asher_sky",
-	"dependencies": ["base >= 1.1.0"],
+	"dependencies": ["base >= 1.1.55", "(?) alien-biomes"],
 	"factorio_version": "1.1"
 }
