@@ -233,17 +233,17 @@ local portalTrivialSmokeParticles = {
   animation = {
     filename = "__factorio-nether__/graphics/particles/nether_portal_particles.png",
     size = 8,
-    scale = 2,
+    scale = 1.5,
     frame_count = 8,
     animation_speed = 1/4,
-    tint = {r=161, g=52, b=235, a=1},
+    tint = {r=161, g=52, b=235, a=10},
   },
-  duration = 256,
+  duration = 512,
   cyclic = true,
   affected_by_wind = false,
   show_when_smoke_off = false,
-  fade_in_duration = 64,
-  fade_away_duration = 128
+  fade_in_duration = 128,
+  fade_away_duration = 256
 }
 
 local portalParticleSource = {
