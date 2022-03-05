@@ -86,6 +86,8 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     position = player.position,
     volume_modifier = .7
   }
+  spawn_particle_cloud(player.surface, player.position)
+  -- pre_teleport_surface_preparation(player)
   -- game.print("trigger sound played")
 -- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
   if not global.teleport_soon then
@@ -226,6 +228,27 @@ function spawn_particle_cloud(surface, position)
   end
 end
 
+function pre_teleport_surface_preparation(traveler)
+  local destination_coordinates = calculate_coordinates(traveler)
+  if destination_coordinates.surface == "nauvis" then
+    local chunk_position = {
+      x = destination_coordinates.position.x/32,
+      y = destination_coordinates.position.y/32
+    }
+    if not game.surfaces["nauvis"].is_chunk_generated(chunk_position) then
+      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 1)
+    end
+  elseif destination_coordinates.surface == "nether" then
+    local chunk_position = {
+      x = destination_coordinates.position.x/32,
+      y = destination_coordinates.position.y/32
+    }
+    if not game.surfaces["nether"].is_chunk_generated(chunk_position) then
+      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 1)
+    end
+  end
+end
+
 -- teleport player through portal
 function into_portal(traveler)
   local current_surface = traveler.surface
@@ -333,7 +356,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 8)
+      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 2)
       game.surfaces["nauvis"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found on nauvis, created new one!")
@@ -361,7 +384,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 8)
+      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 2)
       game.surfaces["nether"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found in the nether, created new one!")
@@ -411,7 +434,8 @@ function build_lava_pump(event)
   -- local player_index = event.player_index
   local surface = original_pump.surface
     -- log("searching for lava tiles")
-  local found_lava = original_pump.surface.find_tiles_filtered({position = original_pump.position, radius = 2, name = "lava"})
+  -- local found_lava = original_pump.surface.find_tiles_filtered({position = original_pump.position, radius = 2, name = "lava"})
+  local found_lava = original_pump.surface.find_tiles_filtered({area = original_pump.bounding_box, name = "lava"})
   -- log(serpent.block(found_lava))
   if found_lava[1] then
     -- log("found lava tiles")
