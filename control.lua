@@ -55,57 +55,56 @@ end)
 script.on_event(defines.events.on_trigger_created_entity, function(event)
 -- MAKE SURE THE ENTITY WHO GOT STICKERED IS PLAYER CHARACTER
   -- game.print(game.tick .. "landmine created entity")
-  if not event.entity and event.entity.sticked_to then
-    return
-  end 
-  if not (event.entity.sticked_to.type == "character") then
-    -- game.print("entity is not character")
-    return
-  end
+  -- if not event.entity and event.entity.sticked_to then
+  --   return
+  -- elseif not (event.entity.sticked_to.type and event.entity.sticked_to.type == "character") then
+  --   -- game.print("entity is not character")
+  --   return
 -- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
-  if not event.entity.name == "nether-portal-landmine-sticker" then
+  if event.entity.name == "nether-portal-landmine-sticker" then
     -- game.print("trigger created entity was not landmine sticker")
-    return
-  end
-  -- game.print(game.tick .. "landmine triggered")
-  local player = event.entity.sticked_to.player
--- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
-  -- game.print(game.tick .. "landmine triggered")
-  if global.teleport_cooldown then
-    if global.teleport_cooldown[player.index] then
-      -- game.print("cooldown active, no sound, no trigger")
-      return
+  --   return
+  -- end
+    -- game.print(game.tick .. "landmine triggered")
+    local player = event.entity.sticked_to.player
+  -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
+    -- game.print(game.tick .. "landmine triggered")
+    if global.teleport_cooldown then
+      if global.teleport_cooldown[player.index] then
+        -- game.print("cooldown active, no sound, no trigger")
+        return
+      end
     end
-  end
--- DON'T DO ANYTHING IF PLAYER IS ALREADY ABOUT TO TELEPORT SOON
-  if global.teleport_soon then
-    if global.teleport_soon[player.index] then
-      -- game.print("global.teleport_soon already exists, no sound no trigger")
-      return
+  -- DON'T DO ANYTHING IF PLAYER IS ALREADY ABOUT TO TELEPORT SOON
+    if global.teleport_soon then
+      if global.teleport_soon[player.index] then
+        -- game.print("global.teleport_soon already exists, no sound no trigger")
+        return
+      end
     end
-  end
-  player.surface.play_sound{
-    path = "trigger-sound",
-    position = player.position,
-    volume_modifier = .7
-  }
-  spawn_particle_cloud(player.surface, player.position)
-  -- pre_teleport_surface_preparation(player)
-  -- game.print("trigger sound played")
--- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
-  if not global.teleport_soon then
-    global.teleport_soon = {}
-    global.teleport_soon[player.index] = {
-      player = player,
-      tick = event.tick + 220
+    player.surface.play_sound{
+      path = "trigger-sound",
+      position = player.position,
+      volume_modifier = .7
     }
-    -- game.print("global.teleport_soon set")
-  else
-    global.teleport_soon[player.index] = {
-      player = player,
-      tick = event.tick + 220
-    }
-    -- game.print("global.teleport_soon set")
+    spawn_particle_cloud(player.surface, player.position)
+    -- pre_teleport_surface_preparation(player)
+    -- game.print("trigger sound played")
+  -- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
+    if not global.teleport_soon then
+      global.teleport_soon = {}
+      global.teleport_soon[player.index] = {
+        player = player,
+        tick = event.tick + 220
+      }
+      -- game.print("global.teleport_soon set")
+    else
+      global.teleport_soon[player.index] = {
+        player = player,
+        tick = event.tick + 220
+      }
+      -- game.print("global.teleport_soon set")
+    end
   end
 end)
 
