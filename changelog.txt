@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
-Date: TBD
+Date: 21MAR2022
   Changes:
     - Added lava to the nether dimension (the nether surface may need to be regenerated on existing maps; please use https://mods.factorio.com/mod/regenerate-terrain)
     - Added lava fluid
     - Added smart-replace logic so offshore pumps built on lava actually pump lava
+    - added little particles when a player is going through a nether portal 
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 30SEP2021
