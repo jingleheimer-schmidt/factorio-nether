@@ -55,6 +55,9 @@ end)
 script.on_event(defines.events.on_trigger_created_entity, function(event)
 -- MAKE SURE THE ENTITY WHO GOT STICKERED IS PLAYER CHARACTER
   -- game.print(game.tick .. "landmine created entity")
+  if not event.entity and event.entity.sticked_to then
+    return
+  end 
   if not (event.entity.sticked_to.type == "character") then
     -- game.print("entity is not character")
     return
