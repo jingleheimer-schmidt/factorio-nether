@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 14APR2022
+  Changes:
+    - Fixed that some entities could walk on water when they shouldn't be allowed to
+---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 21MAR2022
   Changes:
