@@ -2,6 +2,8 @@
 Version: 0.0.7
 Date: ????
   Changes:
+  Graphics:
+    - Fixed flicker in nether portal animation
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 14APR2022

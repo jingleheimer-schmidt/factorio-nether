@@ -17,63 +17,63 @@ local netherPortal = {
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { -.5, -1 }, --top left
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { .5, -1 }, --top right
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { -.5, 0 }, --middle left
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { .5, 0 }, --middle right
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { -.5, 1 }, --bottom left
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             },
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_32px.png",
-                width = 32,
-                height = 32,
+                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                width = 16,
+                height = 16,
                 variation_count = 31,
                 frame_count = 31,
                 shift = { .5, 1 }, --bottom right
-                scale = 1,
+                scale = 2,
                 animation_speed = .3
             }
         }
