@@ -1,4 +1,5 @@
 
+---@type data.RecipePrototype
 local obsidian_recipe = {
     type = "recipe",
     name = "obsidian-recipe",
@@ -9,12 +10,13 @@ local obsidian_recipe = {
         { type = "item",  name = "stone",            amount = 64 },
         { type = "fluid", name = "steam",            amount = 4096 }
     },
-    result = "obsidian",
+    results = { { type = "item", name = "obsidian", amount = 1 } },
     subgroup = "raw-material",
     order = "l[obsidian]", -- l ordering so it shows up after uranium-processing which is k ordering
     enabled = false,
 }
 
+---@type data.RecipePrototype
 local obsidian_from_lava_recipe = {
     type = "recipe",
     name = "lava-water-obsidian-recipe",
@@ -24,13 +26,14 @@ local obsidian_from_lava_recipe = {
         { type = "fluid", name = "lava",  amount = 64 },
         { type = "fluid", name = "water", amount = 64 }
     },
-    result = "obsidian",
+    results = { { type = "item", name = "obsidian", amount = 1 } },
     subgroup = "raw-material",
     order = "l[obsidian]", -- l ordering so it shows up after uranium-processing which is k ordering
     enabled = false,
     hide_from_player_crafting = true,
 }
 
+---@type data.ItemPrototype
 local obsidianItem = {
     type = "item",
     name = "obsidian",

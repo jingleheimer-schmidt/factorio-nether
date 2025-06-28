@@ -1,4 +1,5 @@
 
+---@type data.SimpleEntityPrototype
 local netherPortal = {
     type = "simple-entity",
     name = "nether-portal",
@@ -87,14 +88,14 @@ local netherPortal = {
         }
     },
     integration_patch_render_layer = "ground-patch-higher2",
-    random_variation_on_create = "true",
+    random_variation_on_create = true,
     collision_box = { { -2, -2.5 }, { 2, 2.5 } },
-    collision_mask = { "item-layer", "object-layer", "water-tile" },
+    collision_mask = { layers = { item = true, object = true, water_tile = true } },
     selection_box = { { -2, -2.5 }, { 2, 2.5 } },
     render_layer = "floor",
     map_color = { r = 142, g = 70, b = 218 }, -- don't define alpha
     remove_decoratives = "true",
-    allow_copy_paste = "false",
+    allow_copy_paste = false,
     working_sound =
     {
         sound =
@@ -142,6 +143,7 @@ local netherPortal = {
     }
 }
 
+---@type data.ItemPrototype
 local netherPortalItem = {
     type = "item",
     name = "nether-portal-item",
@@ -153,6 +155,7 @@ local netherPortalItem = {
     order = "q[nether-portal]",
 }
 
+---@type data.RecipePrototype
 local netherPortalRecipe = {
     type = "recipe",
     name = "nether-portal-recipe",
@@ -163,10 +166,11 @@ local netherPortalRecipe = {
         { type = "item", name = "steel-plate",       amount = 1 },
         { type = "item", name = "flamethrower-ammo", amount = 1 }
     },
-    result = "nether-portal-item",
+    results = { { type = "item", name = "nether-portal-item", amount = 1 } },
     enabled = false,
 }
 
+---@type data.StickerPrototype
 local netherPortalLandmineSticker = {
     type = "sticker",
     name = "nether-portal-landmine-sticker",
@@ -175,12 +179,14 @@ local netherPortalLandmineSticker = {
     animation = util.empty_sprite(),
     duration_in_ticks = 6,
     --target_movement_modifier = 1
+    hidden = true,
+    hidden_in_factoriopedia = true,
 }
 
 local dataRawPortalLandmine = util.table.deepcopy(data.raw["land-mine"]["land-mine"])
 dataRawPortalLandmine.name = "nether-portal-landmine"
 dataRawPortalLandmine.max_health = 99999
-dataRawPortalLandmine.force_die_on_attack = "false"
+dataRawPortalLandmine.force_die_on_attack = false
 dataRawPortalLandmine.trigger_radius = 1.25
 -- dataRawPortalLandmine.trigger_force = "all"
 dataRawPortalLandmine.timeout = 0
@@ -201,6 +207,7 @@ dataRawPortalLandmine.action = {
     }
 }
 
+---@type data.AnimationPrototype
 local portalParticleAnimation = {
     name = "nether-portal-particle-animation",
     type = "animation",
@@ -213,6 +220,7 @@ local portalParticleAnimation = {
     draw_as_glow = true
 }
 
+---@type data.ParticlePrototype
 local portalOptimizedParticle = {
     name = "nether-portal-optimized-particle",
     type = "optimized-particle",
@@ -228,6 +236,7 @@ local portalOptimizedParticle = {
     life_time = 64,
 }
 
+---@type data.TrivialSmokePrototype
 local portalTrivialSmokeParticles = {
     name = "nether-portal-trivial-smoke-particles",
     type = "trivial-smoke",
@@ -247,6 +256,7 @@ local portalTrivialSmokeParticles = {
     fade_away_duration = 256
 }
 
+---@type data.ParticleSourcePrototype
 local portalParticleSource = {
     name = "nether-portal-particle-source",
     type = "particle-source",

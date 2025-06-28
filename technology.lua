@@ -1,4 +1,5 @@
 
+---@type data.TechnologyPrototype
 local netherPortalTechnology = {
     type = "technology",
     name = "nether-portal-technology",

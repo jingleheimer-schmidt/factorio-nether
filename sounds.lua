@@ -1,4 +1,5 @@
 
+---@type data.SoundPrototype
 local trigger = {
     name = "trigger-sound",
     type = "sound",
@@ -6,6 +7,7 @@ local trigger = {
     volume = 1
 }
 
+---@type data.SoundPrototype
 local portal = {
     name = "portal-sound",
     type = "sound",
@@ -13,6 +15,7 @@ local portal = {
     volume = 1
 }
 
+---@type data.SoundPrototype
 local travel = {
     name = "travel-sound",
     type = "sound",
