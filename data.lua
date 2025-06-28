@@ -1,6 +1,6 @@
 
-require("nether-portal")
+-- require("nether-portal")
 require("obsidian")
-require("technology")
+-- require("technology")
 require("sounds")
 -- require("lava")

@@ -7,3 +7,5 @@
 
 -- require("lava-masks")
 -- require("lava-transitions")
+
+require("nether-portal")

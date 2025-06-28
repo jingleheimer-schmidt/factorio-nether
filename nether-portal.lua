@@ -1,174 +1,241 @@
 
----@type data.SimpleEntityPrototype
-local netherPortal = {
-    type = "simple-entity",
-    name = "nether-portal",
-    icon = "__factorio-nether__/graphics/nether_portal_icon.png",
-    icon_size = 904,
-    animations = {
-        sheets = {
+---@param planet_name string
+local function create_nether_portal(planet_name)
+    ---@type data.SimpleEntityPrototype
+    local netherPortal = {
+        type = "simple-entity",
+        name = planet_name .. "-nether-portal",
+        icon = "__factorio-nether__/graphics/nether_portal_icon.png",
+        icon_size = 904,
+        animations = {
+            sheets = {
+                {
+                    filename = "__factorio-nether__/graphics/portal_frame_variations_block.png",
+                    width = 64,
+                    height = 80,
+                    variation_count = 31,
+                    frame_count = 31,
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { -.5, -1 }, --top left
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { .5, -1 }, --top right
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { -.5, 0 }, --middle left
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { .5, 0 }, --middle right
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { -.5, 1 }, --bottom left
+                    scale = 2,
+                    animation_speed = .3
+                },
+                {
+                    filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
+                    width = 16,
+                    height = 16,
+                    variation_count = 31,
+                    frame_count = 31,
+                    shift = { .5, 1 }, --bottom right
+                    scale = 2,
+                    animation_speed = .3
+                }
+            }
+        },
+        integration_patch = {
+            sheet = {
+                filename = "__factorio-nether__/graphics/integration_patch_512_v2.png",
+                width = 512,
+                height = 512,
+                frames = 1,
+                scale = .5
+            }
+        },
+        integration_patch_render_layer = "ground-patch-higher2",
+        random_variation_on_create = true,
+        collision_box = { { -2, -2.5 }, { 2, 2.5 } },
+        collision_mask = { layers = { item = true, object = true, water_tile = true } },
+        selection_box = { { -2, -2.5 }, { 2, 2.5 } },
+        render_layer = "floor",
+        map_color = { r = 142, g = 70, b = 218 },
+        remove_decoratives = "true",
+        allow_copy_paste = false,
+        working_sound =
+        {
+            sound =
             {
-                filename = "__factorio-nether__/graphics/portal_frame_variations_block.png",
-                width = 64,
-                height = 80,
-                variation_count = 31,
-                frame_count = 31,
-                scale = 2,
-                animation_speed = .3
+                filename = "__factorio-nether__/sounds/portal.ogg",
+                volume = 0.75
             },
+            audible_distance_modifier = 0.8,
+            probability = 1 / (2 * 60), -- average pause between the sound is 2 seconds
+            fade_in_ticks = 4,
+            fade_out_ticks = 20
+        },
+        minable = {
+            mining_time = 1,
+            results = { { type = "item", name = planet_name .. "-nether-portal", amount = 1 } }
+        },
+        max_health = 64000,
+        flags = {
+            "placeable-neutral",
+            "placeable-player",
+            "player-creation",
+            "not-upgradable",
+            "no-copy-paste",
+            "not-blueprintable",
+            "not-deconstructable",
+        },
+        localised_name = { "entity-name.nether-portal", { "space-location-name." .. planet_name } },
+        localised_description = { "entity-description.nether-portal", { "space-location-name." .. planet_name } },
+        order = data.raw["planet"][planet_name].order,
+    }
+    if feature_flags["space_travel"] then
+        local surface_property_name = planet_name .. "-nether-travel"
+        ---@type data.SurfacePropertyPrototype
+        local surface_property = {
+            type = "surface-property",
+            name = surface_property_name,
+            default_value = 0,
+            hidden = true,
+            hidden_in_factoriopedia = true,
+            localised_name = "",
+            localised_unit_key = "",
+            -- localised_name = { "entity-name.nether-portal", { "space-location-name." .. planet_name } },
+            -- localised_unit_key = "surface-property-unit.nether-portal-surface-property",
+        }
+        netherPortal.surface_conditions = {
             {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { -.5, -1 }, --top left
-                scale = 2,
-                animation_speed = .3
-            },
-            {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { .5, -1 }, --top right
-                scale = 2,
-                animation_speed = .3
-            },
-            {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { -.5, 0 }, --middle left
-                scale = 2,
-                animation_speed = .3
-            },
-            {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { .5, 0 }, --middle right
-                scale = 2,
-                animation_speed = .3
-            },
-            {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { -.5, 1 }, --bottom left
-                scale = 2,
-                animation_speed = .3
-            },
-            {
-                filename = "__factorio-nether__/graphics/portal_animation_block_16px.png",
-                width = 16,
-                height = 16,
-                variation_count = 31,
-                frame_count = 31,
-                shift = { .5, 1 }, --bottom right
-                scale = 2,
-                animation_speed = .3
+                property = surface_property_name,
+                min = 1,
+                max = 1,
             }
         }
-    },
-    integration_patch = {
-        sheet = {
-            filename = "__factorio-nether__/graphics/integration_patch_512_v2.png",
-            width = 512,
-            height = 512,
-            frames = 1,
-            scale = .5
-        }
-    },
-    integration_patch_render_layer = "ground-patch-higher2",
-    random_variation_on_create = true,
-    collision_box = { { -2, -2.5 }, { 2, 2.5 } },
-    collision_mask = { layers = { item = true, object = true, water_tile = true } },
-    selection_box = { { -2, -2.5 }, { 2, 2.5 } },
-    render_layer = "floor",
-    map_color = { r = 142, g = 70, b = 218 }, -- don't define alpha
-    remove_decoratives = "true",
-    allow_copy_paste = false,
-    working_sound =
-    {
-        sound =
-        {
-            filename = "__factorio-nether__/sounds/portal.ogg",
-            volume = 0.75
-        },
-        audible_distance_modifier = 0.8,
-        probability = 1 / (2 * 60), -- average pause between the sound is 2 seconds
-        fade_in_ticks = 4,
-        fade_out_ticks = 20
-    },
-    -- trigger_radius = 2,
-    -- timeout = 230,
-    -- action =
-    -- {
-    --   type = "direct",
-    --   action_delivery =
-    --   {
-    --     type = "instant",
-    --     target_effects =
-    --     {
-    --       {
-    --         type = "script",
-    --         effect_id = "into-portal"
-    --       }
-    --     }
-    --   }
-    -- },
-    -- force_die_on_attack = false,
-    -- trigger_force = "all",
-    minable = {
-        mining_time = 1,
-        result = "nether-portal-item"
-    },
-    max_health = 64000,
-    flags = {
-        "placeable-neutral",
-        "placeable-player",
-        "player-creation",
-        "not-upgradable",
-        "no-copy-paste",
-        "not-blueprintable",
-        "not-deconstructable",
+        data.raw["planet"][planet_name].surface_properties = data.raw["planet"][planet_name].surface_properties or {}
+        data.raw["planet"][planet_name].surface_properties[surface_property_name] = 1
+        data:extend({ surface_property })
+    end
+    ---@type data.ItemPrototype
+    local netherPortalItem = {
+        type = "item",
+        name = planet_name .. "-nether-portal",
+        icon = "__factorio-nether__/graphics/nether_portal_icon.png",
+        icon_size = 904,
+        stack_size = 1,
+        place_result = planet_name .. "-nether-portal",
+        subgroup = "space-related",
+        order = data.raw["planet"][planet_name].order,
     }
-}
+    ---@type data.RecipePrototype
+    local netherPortalRecipe = {
+        type = "recipe",
+        name = planet_name .. "-nether-portal",
+        category = "advanced-crafting",
+        energy_required = 64,
+        ingredients = {
+            { type = "item", name = "obsidian",          amount = 10 },
+            { type = "item", name = "steel-plate",       amount = 1 },
+            { type = "item", name = "flamethrower-ammo", amount = 1 }
+        },
+        results = { { type = "item", name = planet_name .. "-nether-portal", amount = 1 } },
+        enabled = false,
+    }
+    ---@type data.TechnologyPrototype
+    local netherPortalTechnology = {
+        type = "technology",
+        name = planet_name .. "-nether-portal",
+        icon = "__factorio-nether__/graphics/nether_portal_icon.png",
+        icon_size = 904,
+        unit = {
+            count = 150,
+            ingredients = {
+                { "automation-science-pack", 1 },
+                { "logistic-science-pack",   1 },
+                -- {"chemical-science-pack", 1},
+                { "military-science-pack",   1 }
+            },
+            time = 30
+        },
+        prerequisites = { "steel-processing", "flamethrower", "concrete" },
+        effects = {
+            {
+                type   = "unlock-recipe",
+                recipe = planet_name .. "-nether-portal"
+            },
+            {
+                type   = "unlock-recipe",
+                recipe = "obsidian-recipe"
+            },
+            {
+                type   = "unlock-recipe",
+                recipe = "lava-water-obsidian-recipe"
+            }
+        }
+    }
+    for _, tech in pairs(data.raw["technology"]) do
+        if tech.effects then
+            for _, effect in pairs(tech.effects) do
+                if effect.type == "unlock-space-location" then
+                    if effect.space_location == planet_name then
+                        table.insert(netherPortalTechnology.prerequisites, tech.name)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    data:extend({
+        netherPortal,
+        netherPortalItem,
+        netherPortalRecipe,
+        netherPortalTechnology
+    })
+end
 
----@type data.ItemPrototype
-local netherPortalItem = {
-    type = "item",
-    name = "nether-portal-item",
-    icon = "__factorio-nether__/graphics/nether_portal_icon.png",
-    icon_size = 904,
-    stack_size = 1,
-    place_result = "nether-portal",
-    subgroup = "space-related",
-    order = "q[nether-portal]",
-}
-
----@type data.RecipePrototype
-local netherPortalRecipe = {
-    type = "recipe",
-    name = "nether-portal-recipe",
-    category = "advanced-crafting",
-    energy_required = 64,
-    ingredients = {
-        { type = "item", name = "obsidian",          amount = 10 },
-        { type = "item", name = "steel-plate",       amount = 1 },
-        { type = "item", name = "flamethrower-ammo", amount = 1 }
-    },
-    results = { { type = "item", name = "nether-portal-item", amount = 1 } },
-    enabled = false,
-}
+for _, planet in pairs(data.raw["planet"]) do
+    local planet_name = planet.name
+    if planet_name ~= "nether" then
+        create_nether_portal(planet_name)
+    end
+end
 
 ---@type data.StickerPrototype
 local netherPortalLandmineSticker = {
@@ -290,9 +357,6 @@ local portalParticleSource = {
 
 
 data:extend({
-    netherPortal,
-    netherPortalItem,
-    netherPortalRecipe,
     dataRawPortalLandmine,
     netherPortalLandmineSticker,
     portalParticleAnimation,
