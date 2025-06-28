@@ -7,70 +7,138 @@ script.on_init(function()
   local nether_scale = settings.startup["nether-scale-setting"].value
   nether_settings.width = nether_settings.width / nether_scale
   nether_settings.height = nether_settings.height / nether_scale
-  nether_settings.water = 0
-  nether_settings.property_expression_names["tile:water:probability"] = -1000
-  nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-green:probability"] = -1000
-  nether_settings.property_expression_names["tile:deepwater-green:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-shallow:probability"] = -1000
-  nether_settings.property_expression_names["tile:water-mud:probability"] = -1000
-  -- these two might not work... tbd
-  nether_settings.property_expression_names["temperature"] = 50
+  nether_settings.seed = math.random(0, 2394967295)
+  -- 0 to 4,294,967,295
+  -- nether_settings.water = 0
+  -- nether_settings.property_expression_names["tile:water:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:deepwater:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-green:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:deepwater-green:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-shallow:probability"] = -1000
+  -- nether_settings.property_expression_names["tile:water-mud:probability"] = -1000
+  -- -- these two might not work... tbd
+  nether_settings.property_expression_names["temperature"] = 150
   nether_settings.property_expression_names["moisture"] = 0
+  -- for a,b in pairs(data.raw.tile) do
+  --   if not (string.find(b.name, "volcanic") or string.find(b.name, "hot")) then
+  --     local temp = "tile:" .. b.name .. ":probability"
+  --     nether_settings.property_expression_names[temp] = -1000
+  --   end
+  -- end
   game.create_surface("nether", nether_settings)
+end)
+
+script.on_event(defines.events.on_chunk_generated, function(event)
+  if event.surface and event.surface.name == "nether" then
+    local chunk_area = event.area
+    local chunk_position = event.position
+    local surface = event.surface
+    local water_tiles = surface.find_tiles_filtered({area = chunk_area, name = {"water", "water-mud", "water-shallow", "water-green", "deepwater", "deepwater-green"}})
+    if water_tiles then
+      local lava_tiles = {}
+      for each, water_tile in pairs(water_tiles) do
+        local data = {
+          name = "lava",
+          position = water_tile.position
+        }
+        table.insert(lava_tiles, data)
+      end
+      surface.set_tiles(lava_tiles)
+      local fishies = surface.find_entities_filtered({area = chunk_area, type = "fish"})
+      for each, fish in pairs(fishies) do
+        fish.die()
+      end
+    end
+  end
 end)
 
 script.on_event(defines.events.on_trigger_created_entity, function(event)
 -- MAKE SURE THE ENTITY WHO GOT STICKERED IS PLAYER CHARACTER
   -- game.print(game.tick .. "landmine created entity")
-  if not (event.entity.sticked_to.type == "character") then
-    -- game.print("entity is not character")
-    return
-  end
+  -- if not event.entity and event.entity.sticked_to then
+  --   return
+  -- elseif not (event.entity.sticked_to.type and event.entity.sticked_to.type == "character") then
+  --   -- game.print("entity is not character")
+  --   return
 -- MMAKE SURE CREATED ENTITY WAS THE PORTAL STICKER
-  if not event.entity.name == "nether-portal-landmine-sticker" then
+  if event.entity.name == "nether-portal-landmine-sticker" then
     -- game.print("trigger created entity was not landmine sticker")
-    return
-  end
-  -- game.print(game.tick .. "landmine triggered")
-  local player = event.entity.sticked_to.player
--- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
-  -- game.print(game.tick .. "landmine triggered")
-  if global.teleport_cooldown then
-    if global.teleport_cooldown[player.index] then
-      -- game.print("cooldown active, no sound, no trigger")
-      return
+  --   return
+  -- end
+    -- game.print(game.tick .. "landmine triggered")
+    local player = event.entity.sticked_to.player
+  -- DON'T DO ANYTHING IF PLAYER JUST TELEPORTED RECENTLY
+    -- game.print(game.tick .. "landmine triggered")
+    if global.teleport_cooldown then
+      if global.teleport_cooldown[player.index] then
+        -- game.print("cooldown active, no sound, no trigger")
+        return
+      end
     end
-  end
--- DON'T DO ANYTHING IF PLAYER IS ALREADY ABOUT TO TELEPORT SOON
-  if global.teleport_soon then
-    if global.teleport_soon[player.index] then
-      -- game.print("global.teleport_soon already exists, no sound no trigger")
-      return
+  -- DON'T DO ANYTHING IF PLAYER IS ALREADY ABOUT TO TELEPORT SOON
+    if global.teleport_soon then
+      if global.teleport_soon[player.index] then
+        -- game.print("global.teleport_soon already exists, no sound no trigger")
+        return
+      end
     end
-  end
-  player.surface.play_sound{
-    path = "trigger-sound",
-    position = player.position,
-    volume_modifier = .7
-  }
-  -- game.print("trigger sound played")
--- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
-  if not global.teleport_soon then
-    global.teleport_soon = {}
-    global.teleport_soon[player.index] = {
-      player = player,
-      tick = event.tick + 220
+    player.surface.play_sound{
+      path = "trigger-sound",
+      position = player.position,
+      volume_modifier = .7
     }
-    -- game.print("global.teleport_soon set")
-  else
-    global.teleport_soon[player.index] = {
-      player = player,
-      tick = event.tick + 220
-    }
-    -- game.print("global.teleport_soon set")
+    spawn_particle_cloud(player.surface, player.position)
+    -- pre_teleport_surface_preparation(player)
+    -- game.print("trigger sound played")
+  -- STORE DATA IN GLOBAL SO ON_TICK CAN TELEPORT PLAYER SOON
+    if not global.teleport_soon then
+      global.teleport_soon = {}
+      global.teleport_soon[player.index] = {
+        player = player,
+        tick = event.tick + 220
+      }
+      -- game.print("global.teleport_soon set")
+    else
+      global.teleport_soon[player.index] = {
+        player = player,
+        tick = event.tick + 220
+      }
+      -- game.print("global.teleport_soon set")
+    end
   end
 end)
+
+function fiery_lava()
+  for each, player in pairs(game.connected_players) do
+  -- local player = game.get_player(event.player_index)
+    if player.character then
+      local lava_tiles = player.surface.find_tiles_filtered({area = player.character.bounding_box, name = "lava"})
+      if lava_tiles[1] then
+        -- game.print("catch player on fire")
+        local fire = {
+          -- name = "fire-flame",
+          -- name = "fire-flame-on-tree",
+          name = "fire-sticker",
+          position = player.position,
+          -- direction,
+          force = "enemy",
+          target = player.character,
+          -- source,
+          -- fast_replace,
+          -- player,
+          -- spill,
+          raise_built = true,
+          create_build_effect_smoke = true,
+          spawn_decorations = true,
+          move_stuck_players = false,
+          -- item,
+          initial_ground_flame_count = 3,
+        }
+        player.surface.create_entity(fire)
+      end
+    end
+  end
+end
 
 script.on_event(defines.events.on_tick, function()
   if global.teleport_soon then
@@ -124,6 +192,7 @@ script.on_event(defines.events.on_tick, function()
       -- game.print("global.teleport_cooldown cleared")
     end
   end
+  fiery_lava()
 end)
 
 -- is player on portal?
@@ -146,6 +215,42 @@ function is_on_portal(traveler)
   end
 end
 
+function spawn_particle_cloud(surface, position)
+  for i = 1, 32 do
+    local random_1 = math.random(-2.500, 2.500)
+    local random_2 = math.random(-2.500, 2.500)
+    local new_position = {
+      x = position.x + random_1,
+      y = position.y + random_2
+    }
+    surface.create_trivial_smoke({
+      name = "nether-portal-trivial-smoke-particles",
+      position = new_position
+    })
+  end
+end
+
+function pre_teleport_surface_preparation(traveler)
+  local destination_coordinates = calculate_coordinates(traveler)
+  if destination_coordinates.surface == "nauvis" then
+    local chunk_position = {
+      x = destination_coordinates.position.x/32,
+      y = destination_coordinates.position.y/32
+    }
+    if not game.surfaces["nauvis"].is_chunk_generated(chunk_position) then
+      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 1)
+    end
+  elseif destination_coordinates.surface == "nether" then
+    local chunk_position = {
+      x = destination_coordinates.position.x/32,
+      y = destination_coordinates.position.y/32
+    }
+    if not game.surfaces["nether"].is_chunk_generated(chunk_position) then
+      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 1)
+    end
+  end
+end
+
 -- teleport player through portal
 function into_portal(traveler)
   local current_surface = traveler.surface
@@ -159,6 +264,11 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
+    -- traveler.surface.create_trivial_smoke({
+    --   name = "nether-portal-trivial-smoke-particles",
+    --   position = traveler.position
+    -- })
+    spawn_particle_cloud(traveler.surface, traveler.position)
     -- traveler.surface.create_entity(
     -- {
     --   name = "nether-portal-particle-source",
@@ -185,11 +295,11 @@ function into_portal(traveler)
       position = traveler.position,
       volume_modifier = .7
     }
-    -- traveler.surface.create_entity(
-    -- {
-    --   name = "nether-portal-particle-source",
+    -- traveler.surface.create_trivial_smoke({
+    --   name = "nether-portal-trivial-smoke-particles",
     --   position = traveler.position
     -- })
+    spawn_particle_cloud(traveler.surface, traveler.position)
   end
 end
 
@@ -248,7 +358,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 8)
+      game.surfaces["nauvis"].request_to_generate_chunks(destination_coordinates.position, 2)
       game.surfaces["nauvis"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found on nauvis, created new one!")
@@ -276,7 +386,7 @@ function find_portal(traveler, destination_coordinates)
         return new_portal
       end
     else
-      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 8)
+      game.surfaces["nether"].request_to_generate_chunks(destination_coordinates.position, 2)
       game.surfaces["nether"].force_generate_chunk_requests()
       local new_portal = create_portal(traveler, destination_coordinates)
       -- game.print("no portal found in the nether, created new one!")
@@ -320,6 +430,35 @@ function create_portal(traveler, destination_coordinates)
   end
 end
 
+-- build a special lava version of the offshore-pump if it's placed on a lava tile
+function build_lava_pump(event)
+  local original_pump = event.created_entity
+  -- local player_index = event.player_index
+  local surface = original_pump.surface
+    -- log("searching for lava tiles")
+  -- local found_lava = original_pump.surface.find_tiles_filtered({position = original_pump.position, radius = 2, name = "lava"})
+  local found_lava = original_pump.surface.find_tiles_filtered({area = original_pump.bounding_box, name = "lava"})
+  -- log(serpent.block(found_lava))
+  if found_lava[1] then
+    -- log("found lava tiles")
+    local lava_pump_data = {
+      name = "offshore-lava-pump",
+      surface = original_pump.surface,
+      position = original_pump.position,
+      force = original_pump.force,
+      direction = original_pump.direction,
+      player = original_pump.last_user,
+      raise_built = true,
+      create_build_effect_smoke = false,
+      move_stuck_players = true
+    }
+    original_pump.destroy()
+    -- log("original pump destroyed")
+    surface.create_entity(lava_pump_data)
+    -- log("placed lava pump")
+  end
+end
+
 -- creates landmine when portal is placed by player
 script.on_event(defines.events.on_built_entity, function(event)
   -- game.print("player built entity")
@@ -340,6 +479,16 @@ script.on_event(defines.events.on_built_entity, function(event)
     --   name = "nether-portal-particle-source",
     --   position = event.created_entity.position
     -- })
+  elseif event.created_entity.name == "offshore-pump" then
+    build_lava_pump(event)
+  end
+end)
+
+script.on_event(defines.events.script_raised_built, function(event)
+  if event.entity.name == "offshore-pump" then
+    local data = {}
+    data.created_entity = event.entity
+    build_lava_pump(data)
   end
 end)
 
@@ -352,6 +501,8 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
       position = event.created_entity.position
     })
     -- game.print("landmine built (robot placed portal)")
+  elseif event.created_entity.name == "offshore-pump" then
+    build_lava_pump(event)
   end
 end)
 

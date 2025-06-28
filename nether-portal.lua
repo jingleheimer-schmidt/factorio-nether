@@ -233,12 +233,17 @@ local portalTrivialSmokeParticles = {
   animation = {
     filename = "__factorio-nether__/graphics/particles/nether_portal_particles.png",
     size = 8,
-    scale = 4,
+    scale = 1.5,
     frame_count = 8,
-    animation_speed = 1/8,
-    tint = {r=161, g=52, b=235, a=1},
+    animation_speed = 1/4,
+    tint = {r=161, g=52, b=235, a=10},
   },
-  duration = 64,
+  duration = 512,
+  cyclic = true,
+  affected_by_wind = false,
+  show_when_smoke_off = false,
+  fade_in_duration = 128,
+  fade_away_duration = 256
 }
 
 local portalParticleSource = {
@@ -251,7 +256,7 @@ local portalParticleSource = {
   time_before_start = 0,
   time_to_live = 240,
   vertical_speed = .075,
-  icon = "__factorio-nether__/graphics/Nether_portal_squish.png",
+  icon = "__factorio-nether__/thumbnail.png",
   icon_size = 250,
   -- particle = "nether-portal-optimized-particle",
   smoke = {{
@@ -279,8 +284,8 @@ data:extend({
   netherPortalRecipe,
   dataRawPortalLandmine,
   netherPortalLandmineSticker,
-  -- portalParticleAnimation,
-  -- portalOptimizedParticle,
-  -- portalTrivialSmokeParticles,
-  -- portalParticleSource
+  portalParticleAnimation,
+  portalOptimizedParticle,
+  portalTrivialSmokeParticles,
+  portalParticleSource
 })

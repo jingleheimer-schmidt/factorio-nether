@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 14APR2022
+  Changes:
+    - Fixed that some entities could walk on water when they shouldn't be allowed to
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 21MAR2022
+  Changes:
+    - Fixed another crash when trigger_created_entity is not a sticker
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 21MAR2022
+  Changes:
+    - Fixed crash when trigger_created_entity is not a sticker
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 21MAR2022
+  Changes:
+    - Added lava to the nether dimension (the nether surface may need to be regenerated on existing maps; please use https://mods.factorio.com/mod/regenerate-terrain)
+    - Added lava fluid
+    - Added smart-replace logic so offshore pumps built on lava actually pump lava
+    - added little particles when a player is going through a nether portal
+    - updated license
+---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 30SEP2021
   Changes:
